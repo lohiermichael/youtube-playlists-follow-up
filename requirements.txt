@@ -1,4 +1,6 @@
 beautifulsoup4
 requests
-python-dotenv
-pytube
+youtube-data-api
+pandas
+python-youtube
+google-api-python-client
