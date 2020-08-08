@@ -4,17 +4,17 @@ import os
 from googleapiclient.discovery import build
 
 api_key = os.environ['PROJECT_API_KEY']
-print(api_key)
 
 youtube = build(serviceName='youtube',
                 version='v3',
                 developerKey=api_key)
 
 request = youtube.channels().list(
-    forUsername='jemapellemichael',
+    forUsername=os.environ['YOUTUBE_USERNAME'],
     part='statistics'
 )
 
 response = request.execute()
+for channel in response['items']:
 
 print(response)
