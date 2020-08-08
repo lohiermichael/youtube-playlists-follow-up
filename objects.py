@@ -1,9 +1,6 @@
-
-
-import os
 from googleapiclient.discovery import build
-import json
 import pandas as pd
+import os
 
 api_key = os.environ['PROJECT_API_KEY']
 username = os.environ['YOUTUBE_USERNAME']
@@ -52,8 +49,9 @@ class Channel:
 
 
 class Playlist:
-    def __init__(self, id):
+    def __init__(self, id, title):
         self.id = id
+        self.title = title
         self.items = self._get_items()
 
     def _get_items(self) -> pd.DataFrame:
@@ -85,24 +83,3 @@ class Playlist:
                 break
 
         return df_videos
-
-
-if __name__ == '__main__':
-    # List all my channels
-    me = User(name=os.environ['YOUTUBE_USERNAME'])
-    channels_id = me.channels_ids[0]
-    my_channel = Channel(id=channels_id)
-    playlists = my_channel.playlists
-
-    playlists.to_csv('playlists.csv')
-
-    playlist_test_id = playlists[playlists['title']
-                                 == 'Jazz music']['id'].item()
-    # print(playlist_test_id)
-    playlist_test = Playlist(id=playlist_test_id)
-    items_test = playlist_test.items
-    print(len(items_test))
-    items_test.to_csv('items.csv')
-
-    # with open('res.json', 'w') as f:
-    #     json.dump(response, f)
