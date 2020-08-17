@@ -1,6 +1,2 @@
-beautifulsoup4
-requests
-youtube-data-api
 pandas
-python-youtube
 google-api-python-client
