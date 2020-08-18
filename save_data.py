@@ -27,4 +27,4 @@ def save_data(first_time: bool, time: datetime = datetime.now()):
             playlist = Playlist(id=playlist.id, title=playlist.title)
             playlist_items = playlist.items
             playlist_items.to_csv(
-                f'./{time}/channel_{channel_id}/{playlist.title}.csv')
+                f'./{time}/channel_{channel_id}/{playlist.title}.csv', index=False)

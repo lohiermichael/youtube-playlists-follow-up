@@ -89,10 +89,12 @@ class CompareVersions:
             self.summary[type_channels][channel] = {}
             # Store the items
             for playlist in list_playlists:
+                self.summary['common_channels'][common_channel][type_playlists][playlist] = {
+                }
                 df_playlist = pd.read_csv(
                     f'./{version}/{channel}/{playlist}.csv')
-                self.summary[type_channels][channel][playlist] = list(
-                    df_playlist.title)
+                self.summary[type_channels][channel][playlist]['items'] = df_playlist.T.to_dict(
+                )
 
     def compare_playlists(self):
 
@@ -118,10 +120,12 @@ class CompareVersions:
             list_playlists = self.summary['common_channels'][common_channel][type_playlists]
             self.summary['common_channels'][common_channel][type_playlists] = {}
             for playlist in list_playlists:
+                self.summary['common_channels'][common_channel][type_playlists][playlist] = {
+                }
                 df_playlist = pd.read_csv(
                     f'./{version}/{common_channel}/{playlist}.csv')
-                self.summary['common_channels'][common_channel][type_playlists][playlist] = list(
-                    df_playlist.title)
+                self.summary['common_channels'][common_channel][type_playlists][playlist]['items'] = df_playlist.T.to_dict(
+                )
 
     def compare_common_playlists(self):
 
@@ -163,9 +167,16 @@ class CompareVersions:
                     f'./{self.new_version}/{channel}/{playlist}.csv')
                 common_items, old_items, new_items = make_summary(
                     old_L=list(df_old_playlist.title), new_L=list(df_new_playlist.title), print_of=False)
-                self.summary['common_channels'][channel]['common_playlists'][playlist]['common_items'] = common_items
-                self.summary['common_channels'][channel]['common_playlists'][playlist]['old_items'] = old_items
-                self.summary['common_channels'][channel]['common_playlists'][playlist]['new_items'] = new_items
+
+                # Store the common items
+                df_old_items = df_old_playlist[df_old_playlist['title'].isin(
+                    old_items)] if old_items else pd.DataFrame()
+                df_new_items = df_new_playlist[df_new_playlist['title'].isin(
+                    new_items)] if new_items else pd.DataFrame()
+
+                # self.summary['common_channels'][channel]['common_playlists'][playlist]['common_items'] = common_items
+                self.summary['common_channels'][channel]['common_playlists'][playlist]['old_items'] = df_old_items.T.to_dict()
+                self.summary['common_channels'][channel]['common_playlists'][playlist]['new_items'] = df_new_items.T.to_dict()
 
 
 if __name__ == "__main__":
@@ -177,13 +188,13 @@ if __name__ == "__main__":
         now = datetime.now()
 
     with open('versions.txt', 'r') as f:
-        print('Download the most new version of the data')
+        print('Download the latest version of the data')
         old_time = f.read().split('\n')[0]
     save_data(time=now, first_time=False)
 
     # Compare everything
     try:
-        print('compare the two versions')
+        print('Compare the two versions')
         summary_comparison = CompareVersions(
             old_version=f'{old_time}', new_version=f'{now}').summary
 
