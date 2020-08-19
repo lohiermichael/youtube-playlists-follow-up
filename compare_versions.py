@@ -7,7 +7,7 @@ from datetime import datetime
 from time import sleep
 import pandas as pd
 
-from save_data import save_data
+from save import save_data
 
 
 def make_summary(old_L: list, new_L: list, print_of: bool = True) -> Tuple[list]:
@@ -197,16 +197,6 @@ def run_comparison_workflow():
         print('Compare the two versions')
         summary_comparison = CompareVersions(
             old_version=f'{old_time}', new_version=f'{now}').summary
-
-        # Analyze summary comparison
-
-        # Clean date for next time
-        with open('versions.txt', 'r') as f_in:
-            data = f_in.read().splitlines(True)
-        with open('versions.txt', 'w') as f_out:
-            f_out.writelines(data[1:])
-
-        # Remove old data
         shutil.rmtree(f'./{old_time}/')
 
     except Exception as e:

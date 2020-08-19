@@ -1,5 +1,8 @@
 import json
+import shutil
+
 from compare_versions import run_comparison_workflow
+from save import save_logs
 
 
 class Logs:
@@ -14,11 +17,6 @@ class Logs:
         self._store_playlist_messages()
 
         self._store_item_messages()
-
-        self._save_logs()
-
-
-    def 
 
     def _store_playlist_messages(self):
         # Loop over the common channels
@@ -47,7 +45,7 @@ class Logs:
                     if playlist:
                         for item_id, item in playlist['items'].items():
                             item_title = item['title']
-                            message = f'The video {item_title} has been added from the playlist {playlist_name}.'
+                            message = f'The video {item_title} has been added to the playlist {playlist_name}.'
                             self.logs.append(
                                 {'message': message, 'type': 'create_item'})
 
@@ -81,5 +79,6 @@ if __name__ == '__main__':
     logs = Logs('comparison_results.json').logs
     for log in logs:
         print(log['message'])
+    print('\n')
 
-    
+    save_logs(logs=logs)

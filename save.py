@@ -1,5 +1,6 @@
 
 import os
+import json
 from pathlib import Path
 
 from datetime import datetime
@@ -28,3 +29,31 @@ def save_data(first_time: bool, time: datetime = datetime.now()):
             playlist_items = playlist.items
             playlist_items.to_csv(
                 f'./{time}/channel_{channel_id}/{playlist.title}.csv', index=False)
+
+
+def save_logs(logs: list):
+
+    # Create the log file if not already here
+    Path(f'logs').mkdir(parents=True, exist_ok=True)
+
+    # Get the versions
+    with open('versions.txt', 'r') as f_in:
+        versions = f_in.read().splitlines(True)
+
+    log_time = versions[1].replace('\n', '')
+    previous_log_time = versions[0].replace('\n', '')
+
+    # Save the content of the file
+    log_file_content = {'log_time': log_time,
+                        'previous_log_time': previous_log_time, 'logs': logs}
+
+    with open(f'logs/{log_time}.json', 'w') as f:
+        json.dump(log_file_content, f)
+
+    # Remove the old version
+    with open('versions.txt', 'w') as f_out:
+        versions = f_out.write(versions[1])
+
+
+if __name__ == "__main__":
+    saved_logs()
