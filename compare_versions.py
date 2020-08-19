@@ -179,7 +179,7 @@ class CompareVersions:
                 self.summary['common_channels'][channel]['common_playlists'][playlist]['new_items'] = df_new_items.T.to_dict()
 
 
-if __name__ == "__main__":
+def run_comparison_workflow():
     now = datetime.now()
     # Run first time
     if not os.path.isfile('./versions.txt'):
