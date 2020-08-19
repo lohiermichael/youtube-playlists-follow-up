@@ -56,7 +56,8 @@ class Playlist:
 
     def _get_items(self) -> pd.DataFrame:
 
-        df_videos = pd.DataFrame()
+        df_videos = pd.DataFrame(columns=[
+            'id', 'title', 'publishedAt', 'description'])
         next_page_token = None
 
         while True:
@@ -69,6 +70,11 @@ class Playlist:
             chunk_response = request.execute()
 
             videos = [video['snippet'] for video in chunk_response['items']]
+
+            # The playlist is empty
+            if not videos:
+                break
+
             df_chunk_videos = pd.DataFrame.from_records(videos)
             df_chunk_videos['id'] = [video['id']
                                      for video in chunk_response['items']]
