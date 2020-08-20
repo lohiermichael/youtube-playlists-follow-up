@@ -2,7 +2,7 @@ import json
 import shutil
 
 from compare_versions import run_comparison_workflow
-from save import save_logs
+from data_management import save_logs
 
 
 class Logs:
@@ -71,8 +71,7 @@ class Logs:
                             {'message': message, 'type': 'add_item'})
 
 
-if __name__ == '__main__':
-    run_comparison_workflow()
+def run_logs_workflow():
     print('\n')
     print('Results:')
     print('\n')

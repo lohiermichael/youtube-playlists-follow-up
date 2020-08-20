@@ -1,12 +1,13 @@
 
 import os
 import json
+import shutil
 from pathlib import Path
 
 from datetime import datetime
 import pandas as pd
 
-from objects import Channel, Playlist, User
+from models import Channel, Playlist, User
 
 
 def save_data(first_time: bool, time: datetime = datetime.now()):
@@ -50,9 +51,30 @@ def save_logs(logs: list):
     with open(f'logs/{log_time}.json', 'w') as f:
         json.dump(log_file_content, f)
 
-    # Remove the old version
+
+def remove_old_version():
+
+    with open('versions.txt', 'r') as f_in:
+        versions = f_in.read().splitlines(True)
+
+    old_version = versions[0].replace('\n', '')
+
     with open('versions.txt', 'w') as f_out:
         versions = f_out.write(versions[1])
+
+    shutil.rmtree(f'./{old_version}/')
+
+
+def remove_all_data():
+    with open('versions.txt', 'r') as f:
+        versions = f.read().splitlines(True)
+
+    # Remove old and updated version
+    for version in versions:
+        version = version.replace('\n', '')
+        shutil.rmtree(f'./{version}/')
+
+    os.remove('versions.txt')
 
 
 if __name__ == "__main__":

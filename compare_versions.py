@@ -7,7 +7,7 @@ from datetime import datetime
 from time import sleep
 import pandas as pd
 
-from save import save_data
+from data_management import save_data
 
 
 def make_summary(old_L: list, new_L: list, print_of: bool = True) -> Tuple[list]:
@@ -181,26 +181,21 @@ class CompareVersions:
 
 def run_comparison_workflow():
     now = datetime.now()
-    # Run first time
+
+    print('\n')
+    # Save for the first time
     if not os.path.isfile('./versions.txt'):
         print('Download the data for the first time')
         save_data(time=now, first_time=True)
         now = datetime.now()
 
+    # Save regularly
     with open('versions.txt', 'r') as f:
         print('Download the latest version of the data')
         old_time = f.read().split('\n')[0]
     save_data(time=now, first_time=False)
 
     # Compare everything
-    try:
-        print('Compare the two versions')
-        summary_comparison = CompareVersions(
-            old_version=f'{old_time}', new_version=f'{now}').summary
-        shutil.rmtree(f'./{old_time}/')
-
-    except Exception as e:
-        print(e)
-        shutil.rmtree(f'./{old_time}/')
-        shutil.rmtree(f'./{now}/')
-        os.remove('versions.txt')
+    print('Compare the two versions')
+    CompareVersions(old_version=f'{old_time}',
+                    new_version=f'{now}')

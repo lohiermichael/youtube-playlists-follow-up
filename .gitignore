@@ -143,3 +143,4 @@ cython_debug/
 *.json
 *.csv
 versions.txt
+2020*
