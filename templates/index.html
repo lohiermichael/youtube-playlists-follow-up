@@ -10,10 +10,10 @@
 <!-- Latest update data -->
 <div>
 
-    <ul>
+    <ul id="playlists">
         {% for playlist in channel %}
-        <li>{{ playlist.title }}</li>
-        <ul>
+        <li class="playlistName">{{ playlist.title }}</li>
+        <ul class="itemsNames">
             {% for _, item in playlist.items.iterrows() %}
             <li>
                 {{ item['title'] }}
@@ -25,8 +25,21 @@
         {% endfor %}
     </ul>
 </div>
+<script>
+    let playlists = document.getElementById('playlists');
+    let playlistsNames = playlists.getElementsByClassName('playlistName');
+    let itemsNames = playlists.getElementsByClassName('itemsNames');
+    for (let i = 0; i < playlistsNames.length; i++) {
+        playlistsNames[i].addEventListener('click', function () {
+            if (itemsNames[i].style.display === 'none') {
+                itemsNames[i].style.display = 'block';
+            } else {
+                itemsNames[i].style.display = 'none'
+            }
+        })
 
-
+    }
+</script>
 
 
 {% endblock %}
