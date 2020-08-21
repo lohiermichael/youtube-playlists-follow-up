@@ -5,7 +5,7 @@ from compare_versions import run_comparison_workflow
 from data_management import save_logs
 
 
-class Logs:
+class LogsCreation:
     def __init__(self, file_comparison):
         self.file_comparison = file_comparison
 
@@ -75,7 +75,7 @@ def run_logs_workflow():
     print('\n')
     print('Results:')
     print('\n')
-    logs = Logs('comparison_results.json').logs
+    logs = LogsCreation('comparison_results.json').logs
     for log in logs:
         print(log['message'])
     print('\n')

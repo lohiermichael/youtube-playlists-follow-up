@@ -3,34 +3,28 @@ import json
 
 from flask import Flask, render_template
 
+from models import Logs, LatestData
+
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    with open('versions.txt', 'r') as f:
-        latest_update = f.read()
+    latest_data = LatestData()
+
+    # For now one channel
+    channel = latest_data.channels[0]
+
     return render_template('index.html', **locals())
 
 
-@app.route('/logs/index')
-def index_logs():
-    logs_update_times = [logs_update_time.replace(
-        '.json', '') for logs_update_time in os.listdir('logs/')]
+@app.route('/logs')
+def index_show_logs():
 
-    return render_template('logs/index.html', **locals())
+    # Get the logs from the files
+    logs = Logs()
 
-
-@app.route('/logs/show/<logs_update_time>')
-def show_logs(logs_update_time):
-
-    with open(f'./logs/{logs_update_time}.json') as f:
-        dict_logs = json.load(f)
-
-    previous_update_time = dict_logs['previous_update_time']
-    logs = dict_logs['logs']
-
-    return render_template('logs/show.html', **locals())
+    return render_template('logs.html', **locals())
 
 
 if __name__ == __name__:

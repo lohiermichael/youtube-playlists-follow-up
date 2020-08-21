@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Logs update times</h1>
+<ul>
+    {% for update_time, logs_update_time  in logs.items() %}
+
+    <li>
+        <h3>{{update_time}}</h3>
+    </li>
+
+
+    <p>Previous update: {{logs_update_time['previous_update_time']}}</p>
+
+    {% if not logs_update_time['logs'] %}
+    <i>No logs for this update</i>
+    {% endif %}
+
+
+    <ul>
+        {% for log in logs_update_time['logs'] %}
+        <li>{{log['message']}}</li>
+        {% endfor %}
+    </ul>
+
+
+    {% endfor %}
+</ul>
+{% endblock %}

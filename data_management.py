@@ -19,14 +19,14 @@ def save_data(first_time: bool, time: datetime = datetime.now()):
     user = User(name=os.environ['YOUTUBE_USERNAME'])
     for channel_id in user.channels_ids:
         Path(f'./{time}/channel_{channel_id}').mkdir(parents=True, exist_ok=True)
-        channel = Channel(id=channel_id)
+        channel = Channel(id=channel_id, build=True)
         playlists = channel.playlists
         Path(
             f'./{time}/channel_{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
             f'./{time}/channel_{channel_id}/playlists/playlists.csv')
         for _, playlist in playlists.iterrows():
-            playlist = Playlist(id=playlist.id, title=playlist.title)
+            playlist = Playlist(id=playlist.id, title=playlist.title, build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
                 f'./{time}/channel_{channel_id}/{playlist.title}.csv', index=False)

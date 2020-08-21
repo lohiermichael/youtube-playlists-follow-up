@@ -5,4 +5,28 @@
 <h1>Last update: {{ latest_update}}</h1>
 <button>Update</button>
 <button>See your data</button>
+
+<br><br>
+<!-- Latest update data -->
+<div>
+
+    <ul>
+        {% for playlist in channel %}
+        <li>{{ playlist.title }}</li>
+        <ul>
+            {% for _, item in playlist.items.iterrows() %}
+            <li>
+                {{ item['title'] }}
+            </li>
+
+            {% endfor %}
+
+        </ul>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+
 {% endblock %}
