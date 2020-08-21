@@ -42,11 +42,11 @@ def save_logs(logs: list):
         versions = f_in.read().splitlines(True)
 
     log_time = versions[1].replace('\n', '')
-    previous_log_time = versions[0].replace('\n', '')
+    previous_update_time = versions[0].replace('\n', '')
 
     # Save the content of the file
     log_file_content = {'log_time': log_time,
-                        'previous_log_time': previous_log_time, 'logs': logs}
+                        'previous_update_time': previous_update_time, 'logs': logs}
 
     with open(f'logs/{log_time}.json', 'w') as f:
         json.dump(log_file_content, f)
