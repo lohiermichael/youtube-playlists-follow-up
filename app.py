@@ -3,7 +3,7 @@ import json
 
 from flask import Flask, render_template
 
-from models import Logs, LatestData
+from models import LogsByUpdate, LatestData
 
 app = Flask(__name__, static_url_path='/static/')
 
@@ -22,7 +22,7 @@ def index():
 def index_show_logs():
 
     # Get the logs from the files
-    logs = Logs()
+    logs_by_update = LogsByUpdate()
 
     return render_template('logs.html', **locals())
 

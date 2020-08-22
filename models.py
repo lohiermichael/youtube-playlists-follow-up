@@ -119,18 +119,20 @@ class Playlist():
         return df_videos
 
 
-class Logs(dict):
+class LogsByUpdate(list):
     """Reconstitute Logs from saved files"""
 
     def __init__(self):
         self.update_times = [update_time.replace(
             '.json', '') for update_time in os.listdir('Logs')]
 
-        self.keys = self.update_times
-        for update_time in self.keys:
+        # Put the latest first
+        self.update_times.sort(reverse=True)
+
+        for update_time in self.update_times:
             with open(f'logs/{update_time}.json') as f:
                 logs_for_update = json.load(f)
-            self[update_time] = logs_for_update
+            self.append(logs_for_update)
 
         print(self)
 
@@ -148,12 +150,3 @@ class LatestData():
                                  build=False,
                                  update_time=self.update_time)
                          for channel in os.listdir(f'{self.update_time}')]
-
-
-if __name__ == "__main__":
-    ld = LatestData()
-    print(ld.channels)
-    for channel in ld.channels:
-        for playlist in channel:
-            print('\n')
-            print(playlist)

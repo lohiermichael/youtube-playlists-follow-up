@@ -2,22 +2,22 @@
 {% block content %}
 <h1>Logs update times</h1>
 <ul>
-    {% for update_time, logs_update_time  in logs.items() %}
+    {% for log_by_update in logs_by_update %}
 
     <li>
-        <h3>{{update_time}}</h3>
+        <h3>{{log_by_update['log_time']}}</h3>
     </li>
 
 
-    <p>Previous update: {{logs_update_time['previous_update_time']}}</p>
+    <p>Previous update: {{log_by_update['previous_update_time']}}</p>
 
-    {% if not logs_update_time['logs'] %}
+    {% if not log_by_update['logs'] %}
     <i>No logs for this update</i>
     {% endif %}
 
 
     <ul>
-        {% for log in logs_update_time['logs'] %}
+        {% for log in log_by_update['logs'] %}
         <li>{{log['message']}}</li>
         {% endfor %}
     </ul>
