@@ -12,7 +12,7 @@
     <ul id="playlists">
         {% for playlist in channel %}
         <li class="playlistName">{{ playlist.title }}</li>
-        <ul class="itemsNames">
+        <ul class="itemsNames" style="display: none;">
             {% for _, item in playlist.items.iterrows() %}
             <li>
                 {{ item['title'] }}
