@@ -25,26 +25,8 @@
         {% endfor %}
     </ul>
 </div>
-<script>
-    let playlists = document.getElementById('playlists');
-    let playlistsNames = playlists.getElementsByClassName('playlistName');
-    let itemsNames = playlists.getElementsByClassName('itemsNames');
-
-    // Hide display on click
-    for (let i = 0; i < playlistsNames.length; i++) {
-        playlistsNames[i].addEventListener('click', function () {
-            if (itemsNames[i].style.display === 'none') {
-                itemsNames[i].style.display = 'block';
-            } else {
-                itemsNames[i].style.display = 'none'
-            }
-        })
-    }
 
 
-
-
-</script>
-
+<script src="/static/scripts/index.js"></script>
 
 {% endblock %}
