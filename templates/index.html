@@ -3,7 +3,7 @@
 <h1>Youtube playlists follow-up</h1>
 <p>This application helps you keep track of the evolution of the elements of your playlists.</p>
 <h1>Last update: {{ latest_update}}</h1>
-<button>Update</button>
+<button id="updateButton">Update </button>
 <button id="displayData" class="hidden">See your data</button>
 
 <br><br>
@@ -26,6 +26,59 @@
 </div>
 
 
-<script src="{{url_for('static', filename='js/index.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='js/index.js')}}"></script> -->
+<script>
+    // DOM manipulation
+
+    // Hide display last update data on click
+    let playlists = document.getElementById('playlists');
+    let displayDataButton = document.getElementById('displayData');
+
+    displayDataButton.addEventListener('click', function () {
+        if (this.className === 'hidden') {
+            playlists.style.display = 'block';
+            this.className = 'visible';
+            this.textContent = 'Hide your data';
+        } else {
+            playlists.style.display = 'none';
+            this.className = 'hidden';
+            this.textContent = 'See your data';
+        }
+    });
+
+
+    // Hide/display items on click of playlist
+
+    let playlistsNames = playlists.getElementsByClassName('playlistName');
+    let itemsNames = playlists.getElementsByClassName('itemsNames');
+
+    for (let i = 0; i < playlistsNames.length; i++) {
+        playlistsNames[i].addEventListener('click', function () {
+            if (itemsNames[i].style.display === 'none') {
+                itemsNames[i].style.display = 'block';
+            } else {
+                itemsNames[i].style.display = 'none'
+            }
+        })
+    };
+
+
+
+    // Show spinning circle on click button
+    let updateButton = document.getElementById('updateButton');
+
+    updateButton.addEventListener('click', function () {
+        if (this.textContent === 'Update ') {
+            this.textContent = 'Loading  ';
+            let loadingButton = document.createElement('i');
+            loadingButton.classList = ['fa fa-spinner fa-spin'];
+            this.appendChild(loadingButton);
+
+            playlists.style.display = 'none';
+            displayDataButton.className = 'hidden';
+            displayDataButton.textContent = 'See your data';
+        }
+    })
+</script>
 
 {% endblock %}
