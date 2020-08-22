@@ -3,8 +3,7 @@ from compare_versions import run_comparison_workflow
 from create_logs import run_logs_workflow
 
 
-if __name__ == "__main__":
-
+def run_flow():
     try:
         run_comparison_workflow()
         run_logs_workflow()
@@ -13,3 +12,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         remove_all_data()
+
+
+if __name__ == "__main__":
+    run_flow()
