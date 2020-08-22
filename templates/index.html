@@ -4,12 +4,11 @@
 <p>This application helps you keep track of the evolution of the elements of your playlists.</p>
 <h1>Last update: {{ latest_update}}</h1>
 <button>Update</button>
-<button>See your data</button>
+<button id="displayData" class="hidden">See your data</button>
 
 <br><br>
 <!-- Latest update data -->
 <div>
-
     <ul id="playlists">
         {% for playlist in channel %}
         <li class="playlistName">{{ playlist.title }}</li>
@@ -27,6 +26,6 @@
 </div>
 
 
-<script src="/static/scripts/index.js"></script>
+<script src="{{url_for('static', filename='js/index.js')}}"></script>
 
 {% endblock %}

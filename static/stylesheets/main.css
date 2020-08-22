@@ -1,8 +1,0 @@
-        .itemsNames {
-            display: none;
-        }
-
-        .playlistName:hover {
-            color: blue;
-            cursor: pointer;
-        }
