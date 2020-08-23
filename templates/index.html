@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
+    body {
+        margin: 10px 50px;
+    }
+
     #introduction {
         white-space: nowrap;
 
@@ -32,15 +36,35 @@
 
     }
 
+
     #lastUpdateTime {
         font-size: 20px;
         color: #ff9999;
+    }
+
+    #playlists {
+        list-style: none;
+    }
+
+    .playlistName:before {
+        content: "\f03a";
+        /* FontAwesome Unicode */
+        font-family: FontAwesome;
+        display: inline-block;
+        margin-left: -1.5em;
+        /* same as padding-left set on li */
+        width: 1.5em;
+        /* same as padding-left set on li */
     }
 
 
     .playlistName:hover {
         color: blue;
         cursor: pointer;
+    }
+
+    .items {
+        list-style: none;
     }
 </style>
 
@@ -64,11 +88,10 @@
     <ul id="playlists">
         {% for playlist in channel %}
         <li class="playlistName">{{ playlist.title }}</li>
-        <ul class="itemsNames" style="display: none;">
+        <ul class="items" style="display: none;">
             {% for _, item in playlist.items.iterrows() %}
-            <li>
-                {{ item['title'] }}
-            </li>
+            <li class="itemName">
+                <i class="fa fa-youtube"></i> {{ item['title'] }}</li>
 
             {% endfor %}
 
@@ -83,14 +106,14 @@
 
     // Hide/display items on click of playlist
     let playlistsNames = playlists.getElementsByClassName('playlistName');
-    let itemsNames = playlists.getElementsByClassName('itemsNames');
+    let items = playlists.getElementsByClassName('items');
 
     for (let i = 0; i < playlistsNames.length; i++) {
         playlistsNames[i].addEventListener('click', function () {
-            if (itemsNames[i].style.display === 'none') {
-                itemsNames[i].style.display = 'block';
+            if (items[i].style.display === 'none') {
+                items[i].style.display = 'block';
             } else {
-                itemsNames[i].style.display = 'none'
+                items[i].style.display = 'none'
             }
         })
     };
