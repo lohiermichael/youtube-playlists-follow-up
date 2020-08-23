@@ -1,15 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Youtube playlists follow-up</h1>
-<p>This application helps you keep track of the evolution of the elements of your playlists.</p>
-<!-- <button id="displayData" class="hidden">See your data</button> -->
-<form action="#" method="POST">
-    <button id="updateButton">Update </button>
-</form>
+<style>
+    #introduction {
+        white-space: nowrap;
+
+    }
+
+    #appTitle {
+        width: 50%;
+        margin: 0 auto;
+        font-size: 50px;
+        margin-top: 10px;
+    }
+
+    #appDescription {
+        width: 70%;
+        margin: 0 auto;
+        font-size: 20px;
+        margin-top: 5px;
+    }
+
+    #updateButton {
+        display: block;
+        width: 20%;
+        margin: 0 auto;
+        padding: 14px 28px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 10px;
+
+    }
+
+    #lastUpdateTime {
+        font-size: 20px;
+        color: #ff9999;
+    }
+
+
+    .playlistName:hover {
+        color: blue;
+        cursor: pointer;
+    }
+</style>
+
+<div id="introduction" class="container">
+    <h1 id="appTitle">
+        <i class="fa fa-youtube"></i>
+        Playlists Follow-up</h1>
+    <p id="appDescription">This application helps you keep track of the evolution of the elements of your playlists.</p>
+    <!-- <button id="displayData" class="hidden">See your data</button> -->
+    <form action="#" method="POST">
+        <button id="updateButton" class="btn btn-outline-dark">Update the logs</button>
+    </form>
+</div>
 
 <br>
 
-<h3>Last update: {{ latest_data.update_time}}</h3>
+<h3>Last update: <em id=lastUpdateTime>{{ latest_data.update_time}}</em></h3>
 
 <!-- Latest update data -->
 <div>
