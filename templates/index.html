@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
-    body {
-        margin: 10px 50px;
-    }
-
     #introduction {
         white-space: nowrap;
 
@@ -37,10 +33,6 @@
     }
 
 
-    #lastUpdateTime {
-        font-size: 20px;
-        color: #ff9999;
-    }
 
     #playlists {
         list-style: none;
@@ -81,7 +73,7 @@
 
 <br>
 
-<h3>Last update: <em id=lastUpdateTime>{{ latest_data.update_time}}</em></h3>
+<h3>Last update: <em class=logTime>{{ latest_data.update_time}}</em></h3>
 
 <!-- Latest update data -->
 <div>

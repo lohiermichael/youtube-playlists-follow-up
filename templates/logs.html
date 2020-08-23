@@ -1,28 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Logs update times</h1>
-<ul>
+<style>
+    #logsTitle {
+        margin: 20px 0px;
+    }
+
+    #logsByUpdate {
+        list-style: none;
+    }
+
+    i.fa.fa-history {
+        margin-right: 5px;
+
+    }
+
+    .logByUpdate {
+        margin-bottom: 50px;
+    }
+
+    .previousTime {
+        color: grey;
+    }
+</style>
+
+
+<h1 id="logsTitle">Logs update times</h1>
+<ul id="logsByUpdate">
     {% for log_by_update in logs_by_update %}
+    <li class="logByUpdate">
+        <i class="fa fa-history fa-lg"></i>
+        <em class="logTime">{{log_by_update['log_time']}}</em>
 
-    <li>
-        <h3>{{log_by_update['log_time']}}</h3>
+
+        <p>Previous update: <i class="previousTime">{{log_by_update['previous_update_time']}}</i></p>
+
+        {% if not log_by_update['logs'] %}
+        <i>No logs for this update</i>
+        {% endif %}
+
+
+        <ul class="logs">
+            {% for log in log_by_update['logs'] %}
+            <li>{{log['message']}}</li>
     </li>
-
-
-    <p>Previous update: {{log_by_update['previous_update_time']}}</p>
-
-    {% if not log_by_update['logs'] %}
-    <i>No logs for this update</i>
-    {% endif %}
-
-
-    <ul>
-        {% for log in log_by_update['logs'] %}
-        <li>{{log['message']}}</li>
-        {% endfor %}
-    </ul>
-
-
     {% endfor %}
+</ul>
+
+
+{% endfor %}
 </ul>
 {% endblock %}
