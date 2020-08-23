@@ -6,7 +6,7 @@
 <form action="#" method="POST">
     <button id="updateButton">Update </button>
 </form>
-<button id="displayData" class="hidden">See your data</button>
+<!-- <button id="displayData" class="hidden">See your data</button> -->
 
 <br><br>
 <!-- Latest update data -->
@@ -30,27 +30,8 @@
 
 <!-- <script src="{{url_for('static', filename='js/index.js')}}"></script> -->
 <script>
-    // DOM manipulation
-
-    // Hide display last update data on click
-    let playlists = document.getElementById('playlists');
-    let displayDataButton = document.getElementById('displayData');
-
-    displayDataButton.addEventListener('click', function () {
-        if (this.className === 'hidden') {
-            playlists.style.display = 'block';
-            this.className = 'visible';
-            this.textContent = 'Hide your data';
-        } else {
-            playlists.style.display = 'none';
-            this.className = 'hidden';
-            this.textContent = 'See your data';
-        }
-    });
-
 
     // Hide/display items on click of playlist
-
     let playlistsNames = playlists.getElementsByClassName('playlistName');
     let itemsNames = playlists.getElementsByClassName('itemsNames');
 
@@ -66,7 +47,7 @@
 
 
 
-    // Show spinning circle on click button
+    // Click on update
     let updateButton = document.getElementById('updateButton');
 
     updateButton.addEventListener('click', function () {
@@ -77,8 +58,6 @@
             this.appendChild(loadingButton);
 
             playlists.style.display = 'none';
-            displayDataButton.className = 'hidden';
-            displayDataButton.textContent = 'See your data';
         }
     })
 </script>

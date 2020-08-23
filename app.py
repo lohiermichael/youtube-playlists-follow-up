@@ -13,10 +13,10 @@ app = Flask(__name__, static_url_path='/static/')
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
-
     if request.method == 'POST':
         run_flow()
-        
+        pass
+
     latest_data = LatestData()
     # For now one channel
     channel = latest_data.channels[0]
