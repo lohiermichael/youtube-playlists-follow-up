@@ -1,7 +1,7 @@
 import os
 import json
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 from models import LogsByUpdate, LatestData
 
@@ -15,7 +15,7 @@ def index():
 
     if request.method == 'POST':
         run_flow()
-        pass
+        return redirect('/logs')
 
     latest_data = LatestData()
     # For now one channel

@@ -56,9 +56,13 @@
         font-size: 1.1em;
     }
 
-    .playlistName:hover {
+    .clickable:hover {
         color: #ff9999;
         cursor: pointer;
+    }
+
+    .detailsDisplay {
+        color: grey;
     }
 
     .items {
@@ -87,14 +91,15 @@
     <ul id="playlists">
         {% for playlist in channel %}
         <li class="playlist boarded">
-            <p class="playlistName">
+            <p class="playlistName clickable">
                 <i class="fa fa-list"></i>
                 {{ playlist.title }}
             </p>
             <ul class="items" style="display: none;">
                 {% for _, item in playlist.items.iterrows() %}
-                <li class="itemName">
+                <li class="item">
                     <i class="fa fa-youtube"></i> {{ item['title'] }}
+                    <p class="detailsDisplay clickable">See details</p>
                 </li>
                 {% endfor %}
             </ul>
@@ -125,9 +130,10 @@
 
     // Click on update
     let updateButton = document.getElementById('updateButton');
+    console.log(updateButton);
 
     updateButton.addEventListener('click', function () {
-        if (this.textContent === 'Update ') {
+        if (this.textContent === 'Update the logs') {
             this.textContent = 'Loading  ';
             let loadingButton = document.createElement('i');
             loadingButton.classList = ['fa fa-spinner fa-spin'];

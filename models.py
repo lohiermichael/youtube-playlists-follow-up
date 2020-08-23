@@ -134,8 +134,6 @@ class LogsByUpdate(list):
                 logs_for_update = json.load(f)
             self.append(logs_for_update)
 
-        print(self)
-
 
 class LatestData():
     def __init__(self):
