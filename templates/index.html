@@ -2,13 +2,15 @@
 {% block content %}
 <h1>Youtube playlists follow-up</h1>
 <p>This application helps you keep track of the evolution of the elements of your playlists.</p>
-<h1>Last update: {{ latest_update}}</h1>
+<!-- <button id="displayData" class="hidden">See your data</button> -->
 <form action="#" method="POST">
     <button id="updateButton">Update </button>
 </form>
-<!-- <button id="displayData" class="hidden">See your data</button> -->
 
-<br><br>
+<br>
+
+<h3>Last update: {{ latest_data.update_time}}</h3>
+
 <!-- Latest update data -->
 <div>
     <ul id="playlists">
