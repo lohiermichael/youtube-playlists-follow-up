@@ -2,8 +2,3 @@
     color: blue;
     cursor: pointer;
 }
-
-/* We initialize them as hidden */
-#playlists {
-    display: none;
-}
