@@ -2,20 +2,23 @@
 {% block content %}
 <style>
     #introduction {
+        margin: 50px auto;
+    }
+
+    #introduction {
         white-space: nowrap;
 
     }
 
     #appTitle {
         width: 50%;
-        margin: 0 auto;
+        margin: 20px auto;
         font-size: 50px;
-        margin-top: 10px;
     }
 
     #appDescription {
         width: 70%;
-        margin: 0 auto;
+        margin: 20px auto;
         font-size: 20px;
         margin-top: 5px;
     }
@@ -32,26 +35,29 @@
 
     }
 
-
-
     #playlists {
+        margin-top: 20px;
         list-style: none;
     }
 
-    .playlistName:before {
-        content: "\f03a";
-        /* FontAwesome Unicode */
-        font-family: FontAwesome;
-        display: inline-block;
-        margin-left: -1.5em;
-        /* same as padding-left set on li */
-        width: 1.5em;
-        /* same as padding-left set on li */
+    .boarded {
+        border: solid 1px black;
+        border-radius: 12px;
+        padding: 10px;
+
     }
 
+    .playlist {
+        margin-top: 0px;
+        margin-bottom: 30px;
+    }
+
+    .playlistName {
+        font-size: 1.1em;
+    }
 
     .playlistName:hover {
-        color: blue;
+        color: #ff9999;
         cursor: pointer;
     }
 
@@ -71,23 +77,28 @@
     </form>
 </div>
 
-<br>
+
+<hr>
 
 <h3>Last update: <em class=logTime>{{ latest_data.update_time}}</em></h3>
 
 <!-- Latest update data -->
-<div>
+<div class=>
     <ul id="playlists">
         {% for playlist in channel %}
-        <li class="playlistName">{{ playlist.title }}</li>
-        <ul class="items" style="display: none;">
-            {% for _, item in playlist.items.iterrows() %}
-            <li class="itemName">
-                <i class="fa fa-youtube"></i> {{ item['title'] }}</li>
-
-            {% endfor %}
-
-        </ul>
+        <li class="playlist boarded">
+            <p class="playlistName">
+                <i class="fa fa-list"></i>
+                {{ playlist.title }}
+            </p>
+            <ul class="items" style="display: none;">
+                {% for _, item in playlist.items.iterrows() %}
+                <li class="itemName">
+                    <i class="fa fa-youtube"></i> {{ item['title'] }}
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
         {% endfor %}
     </ul>
 </div>
