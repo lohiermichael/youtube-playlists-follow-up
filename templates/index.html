@@ -35,7 +35,7 @@
 
     }
 
-    #playlists {
+    #listPlaylists {
         margin-top: 20px;
         list-style: none;
     }
@@ -65,7 +65,11 @@
         color: grey;
     }
 
-    .items {
+    .detail {
+        color: #ff9999;
+    }
+
+    .listItems {
         list-style: none;
     }
 </style>
@@ -88,18 +92,22 @@
 
 <!-- Latest update data -->
 <div class=>
-    <ul id="playlists">
+    <ul id="listPlaylists">
         {% for playlist in channel %}
         <li class="playlist boarded">
             <p class="playlistName clickable">
                 <i class="fa fa-list"></i>
                 {{ playlist.title }}
             </p>
-            <ul class="items" style="display: none;">
+            <ul class="listItems" hidden>
                 {% for _, item in playlist.items.iterrows() %}
                 <li class="item">
                     <i class="fa fa-youtube"></i> {{ item['title'] }}
                     <p class="detailsDisplay clickable">See details</p>
+                    <ul class="itemDetails" hidden>
+                        <li><em class="detail">Publication time:</em> {{ item['publishedAt']}}</li>
+                        <li> <em class="detail">Description:</em> {{ item['description']}}</li>
+                    </ul>
                 </li>
                 {% endfor %}
             </ul>
@@ -113,24 +121,46 @@
 <script>
 
     // Hide/display items on click of playlist
-    let playlistsNames = playlists.getElementsByClassName('playlistName');
-    let items = playlists.getElementsByClassName('items');
+    listPlaylists = document.getElementById('listPlaylists')
+    let playlistsNames = listPlaylists.getElementsByClassName('playlistName');
+    let listItems = listPlaylists.getElementsByClassName('listItems');
 
     for (let i = 0; i < playlistsNames.length; i++) {
         playlistsNames[i].addEventListener('click', function () {
-            if (items[i].style.display === 'none') {
-                items[i].style.display = 'block';
+            if (listItems[i].hidden) {
+                listItems[i].hidden = false;
+                this.style.color = '#ff9999';
             } else {
-                items[i].style.display = 'none'
+                listItems[i].hidden = true;
             }
         })
     };
+
+    for (let i = 0; i < playlistsNames.length; i++) {
+
+        let items = listItems[i].getElementsByClassName('item');
+        for (let j = 0; j < items.length; j++) {
+            let displayDetailsButton = items[j].getElementsByClassName('detailsDisplay')[0];
+            let itemsDetails = items[j].getElementsByClassName('itemDetails')[0];
+            displayDetailsButton.addEventListener('click', function () {
+                if (this.textContent == 'See details') {
+                    this.textContent = 'Hide details';
+                    this.style.color = '#ff9999';
+                    itemsDetails.hidden = false;
+                } else {
+                    this.textContent = 'See details';
+                    this.style.color = 'grey';
+                    itemsDetails.hidden = true;
+
+                }
+            })
+        }
+    }
 
 
 
     // Click on update
     let updateButton = document.getElementById('updateButton');
-    console.log(updateButton);
 
     updateButton.addEventListener('click', function () {
         if (this.textContent === 'Update the logs') {
@@ -139,7 +169,7 @@
             loadingButton.classList = ['fa fa-spinner fa-spin'];
             this.appendChild(loadingButton);
 
-            playlists.style.display = 'none';
+            listPlaylists.style.display = 'none';
         }
     })
 </script>
