@@ -1,17 +1,23 @@
 import os
 import json
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from models import LogsByUpdate, LatestData
+
+from run import run_flow
 
 app = Flask(__name__, static_url_path='/static/')
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    latest_data = LatestData()
 
+
+    if request.method == 'POST':
+        run_flow()
+        
+    latest_data = LatestData()
     # For now one channel
     channel = latest_data.channels[0]
 
