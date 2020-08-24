@@ -26,7 +26,8 @@ def save_data(first_time: bool, time: datetime = datetime.now()):
         playlists.to_csv(
             f'./{time}/channel_{channel_id}/playlists/playlists.csv')
         for _, playlist in playlists.iterrows():
-            playlist = Playlist(id=playlist.id, title=playlist.title, build=True)
+            playlist = Playlist(
+                id=playlist.id, title=playlist.title, build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
                 f'./{time}/channel_{channel_id}/{playlist.title}.csv', index=False)
@@ -66,6 +67,7 @@ def remove_old_version():
 
 
 def remove_all_data():
+
     with open('versions.txt', 'r') as f:
         versions = f.read().splitlines(True)
 

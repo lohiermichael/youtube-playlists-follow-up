@@ -1,5 +1,7 @@
 import os
 import json
+import shutil
+from datetime import datetime
 
 from googleapiclient.discovery import build
 import pandas as pd
@@ -123,28 +125,55 @@ class LogsByUpdate(list):
     """Reconstitute Logs from saved files"""
 
     def __init__(self):
-        self.update_times = [update_time.replace(
-            '.json', '') for update_time in os.listdir('Logs')]
 
-        # Put the latest first
-        self.update_times.sort(reverse=True)
+        if not 'logs' in os.listdir():
+            self.update_times = []
 
-        for update_time in self.update_times:
-            with open(f'logs/{update_time}.json') as f:
-                logs_for_update = json.load(f)
-            self.append(logs_for_update)
+        else:
+            self.update_times = [update_time.replace(
+                '.json', '') for update_time in os.listdir('logs')]
+
+            # Put the latest first
+            self.update_times.sort(reverse=True)
+
+            for update_time in self.update_times:
+                with open(f'logs/{update_time}.json') as f:
+                    logs_for_update = json.load(f)
+                self.append(logs_for_update)
 
 
 class LatestData():
     def __init__(self):
+        if 'versions.txt' not in os.listdir('.') or 'logs' not in os.listdir('.'):
+            # Remove any possible old folder of data
+            for data_folder in os.listdir('.'):
+                current_year = str(datetime.now().year)
+                if data_folder.startswith(current_year):
+                    shutil.rmtree(f'./{data_folder}/')
 
-        with open('versions.txt', 'r') as f:
-            self.update_time = f.read().replace('\n', '')
+                # Remove versions.txt
+            if os.path.exists('versions.txt'):
+                os.remove('versions.txt')
 
-        with open(f'logs/{self.update_time}.json', 'r') as f:
-            self.previous_update_time = json.load(f)['previous_update_time']
+            self.channels = []
+            self.update_time = None
+            self.previous_update_time = None
 
-        self.channels = [Channel(id=channel.replace('channel_', ''),
-                                 build=False,
-                                 update_time=self.update_time)
-                         for channel in os.listdir(f'{self.update_time}')]
+        else:
+
+            with open('versions.txt', 'r') as f:
+                self.update_time = f.read().replace('\n', '')
+
+            with open(f'logs/{self.update_time}.json', 'r') as f:
+                self.previous_update_time = json.load(
+                    f)['previous_update_time']
+
+            self.channels = [Channel(id=channel.replace('channel_', ''),
+                                     build=False,
+                                     update_time=self.update_time)
+                             for channel in os.listdir(f'{self.update_time}')]
+
+
+if __name__ == "__main__":
+    l = LatestData()
+    print(l.channels)

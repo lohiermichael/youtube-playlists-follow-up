@@ -15,13 +15,11 @@ def index():
 
     if request.method == 'POST':
         run_flow()
-        
+
         return redirect('/logs')
 
     elif request.method == 'GET':
         latest_data = LatestData()
-        # For now one channel
-        channel = latest_data.channels[0]
 
         return render_template('index.html', **locals())
 

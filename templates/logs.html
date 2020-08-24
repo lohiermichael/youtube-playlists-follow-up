@@ -26,6 +26,11 @@
 
 <h1 id="logsTitle">Logs update times</h1>
 <ul id="logsByUpdate">
+    {% if not logs_by_update %}
+    <i>No logs are stored</i>
+    {% endif %}
+
+
     {% for log_by_update in logs_by_update %}
     <li class="logByUpdate">
         <i class="fa fa-history fa-lg"></i>

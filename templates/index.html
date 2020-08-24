@@ -3,12 +3,9 @@
 <style>
     #introduction {
         margin: 50px auto;
+        text-align: center;
     }
 
-    #introduction {
-        white-space: nowrap;
-
-    }
 
     #appTitle {
         width: 50%;
@@ -81,7 +78,7 @@
     <p id="appDescription">This application helps you keep track of the evolution of the elements of your playlists.</p>
     <!-- <button id="displayData" class="hidden">See your data</button> -->
     <form action="#" method="POST">
-        <button id="updateButton" class="btn btn-outline-dark">Update the logs</button>
+        <button id="updateButton" class="btn btn-block btn-outline-dark">Update the logs</button>
     </form>
 </div>
 
@@ -90,8 +87,12 @@
 
 <h3>Last update: <em class=logTime>{{ latest_data.update_time}}</em></h3>
 
+
+
 <!-- Latest update data -->
-<div class=>
+
+<div class="container">
+    {% for channel in latest_data.channels %}
     <ul id="listPlaylists">
         {% for playlist in channel %}
         <li class="playlist boarded">
@@ -114,6 +115,7 @@
         </li>
         {% endfor %}
     </ul>
+    {% endfor %}
 </div>
 
 
@@ -121,43 +123,46 @@
 <script>
 
     // Hide/display items on click of playlist
-    listPlaylists = document.getElementById('listPlaylists')
-    let playlistsNames = listPlaylists.getElementsByClassName('playlistName');
-    let listItems = listPlaylists.getElementsByClassName('listItems');
+    let listPlaylists = document.getElementById('listPlaylists')
 
-    for (let i = 0; i < playlistsNames.length; i++) {
-        playlistsNames[i].addEventListener('click', function () {
-            if (listItems[i].hidden) {
-                listItems[i].hidden = false;
-                this.style.color = '#ff9999';
-            } else {
-                listItems[i].hidden = true;
-                this.style.color = 'black';
-            }
-        })
-    };
+    if (listPlaylists !== null) {
+        let playlistsNames = listPlaylists.getElementsByClassName('playlistName');
+        let listItems = listPlaylists.getElementsByClassName('listItems');
 
-    for (let i = 0; i < playlistsNames.length; i++) {
-
-        let items = listItems[i].getElementsByClassName('item');
-        for (let j = 0; j < items.length; j++) {
-            let displayDetailsButton = items[j].getElementsByClassName('detailsDisplay')[0];
-            let itemsDetails = items[j].getElementsByClassName('itemDetails')[0];
-            displayDetailsButton.addEventListener('click', function () {
-                if (this.textContent == 'See details') {
-                    this.textContent = 'Hide details';
+        for (let i = 0; i < playlistsNames.length; i++) {
+            playlistsNames[i].addEventListener('click', function () {
+                if (listItems[i].hidden) {
+                    listItems[i].hidden = false;
                     this.style.color = '#ff9999';
-                    itemsDetails.hidden = false;
                 } else {
-                    this.textContent = 'See details';
-                    this.style.color = 'grey';
-                    itemsDetails.hidden = true;
-
+                    listItems[i].hidden = true;
+                    this.style.color = 'black';
                 }
             })
         }
-    }
 
+        for (let i = 0; i < playlistsNames.length; i++) {
+
+            let items = listItems[i].getElementsByClassName('item');
+            for (let j = 0; j < items.length; j++) {
+                let displayDetailsButton = items[j].getElementsByClassName('detailsDisplay')[0];
+                let itemsDetails = items[j].getElementsByClassName('itemDetails')[0];
+                displayDetailsButton.addEventListener('click', function () {
+                    if (this.textContent == 'See details') {
+                        this.textContent = 'Hide details';
+                        this.style.color = '#ff9999';
+                        itemsDetails.hidden = false;
+                    } else {
+                        this.textContent = 'See details';
+                        this.style.color = 'grey';
+                        itemsDetails.hidden = true;
+
+                    }
+                })
+            }
+        }
+
+    }
 
 
     // Click on update
@@ -169,8 +174,9 @@
             let loadingButton = document.createElement('i');
             loadingButton.classList = ['fa fa-spinner fa-spin'];
             this.appendChild(loadingButton);
-
-            listPlaylists.style.display = 'none';
+            if (listPlaylists !== null) {
+                listPlaylists.style.display = 'none';
+            }
         }
     })
 </script>
