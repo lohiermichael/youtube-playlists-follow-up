@@ -144,3 +144,5 @@ cython_debug/
 *.csv
 versions.txt
 2020*
+
+CREDENTIALS_PICKLE_FILE
