@@ -142,11 +142,6 @@ cython_debug/
 
 *.json
 *.csv
-versions.txt
 
-#  Long future :)
-2020*
-2021*
-2022*
-
-OAUTH_CREDENTIALS
+channels/
+updates/

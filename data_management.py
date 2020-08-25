@@ -8,34 +8,69 @@ from datetime import datetime
 import pandas as pd
 
 from authentication import Authentication
-from models import Channel, Playlist, User
+from models import Channel, Playlist
 
 
-def save_data(first_time: bool, time: datetime = datetime.now()):
+def add_new_channel(mine: bool, username: str = None):
+
+    # Ask if you want new credentials or use the credentials of previous channels
+    new_client_secrets = False
+    if new_client_secrets:
+        authentication = Authentication(new_client_secrets=True)
+    else:
+        channel_id_cred = 'UCgJ4y17GAgzlLpqIJbj9gVQ'
+        authentication = Authentication(
+            new_client_secrets=False, channel_id=channel_id_cred)
+
+    if mine:
+        channel = Channel(authentication=authentication,
+                          mine=True, build=True)
+
+    elif username:
+        channel = Channel(authentication=authentication,
+                          username=username)
+
+    # Save information about the channel
+    channel_info = {'title': channel.title,
+                    'id': channel.id,
+                    'published_at': channel.published_at,
+                    'description': channel.description}
+
+    with open(f'channels/{channel.id}/channel_info.json', 'w') as f:
+        json.dump(channel_info, f)
+
+
+def save_data(time: datetime = datetime.now(), first_time=True):
     method = 'w' if first_time else 'a'
-    with open('versions.txt', method) as f:
+    with open('updates/versions.txt', method) as f:
         f.write(f'{str(time)}\n')
 
-    Path(f'{time}').mkdir(parents=True, exist_ok=True)
+    Path(f'updates/{time}').mkdir(parents=True, exist_ok=True)
+    Path(f'updates/{time}/channels').mkdir(parents=True, exist_ok=True)
 
-    youtube_auth = Authentication(auth_type='own_account')
+    channels_ids = [channel_id for channel_id in os.listdir(
+        'channels') if channel_id != 'new_channel']
 
-    for channel_id in user.channels_ids:
-        Path(f'./{time}/channel_{channel_id}').mkdir(parents=True, exist_ok=True)
-        channel = Channel(youtube_auth=youtube_auth, id=channel_id, build=True)
+    for channel_id in channels_ids:
+        authentication = Authentication(
+            new_client_secrets=False, channel_id=channel_id)
+        Path(
+            f'./updates/{time}/channels/{channel_id}').mkdir(parents=True, exist_ok=True)
+        channel = Channel(authentication=authentication,
+                          id=channel_id, build=True)
         playlists = channel.playlists
         Path(
-            f'./{time}/channel_{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
+            f'./updates/{time}/channels/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
-            f'./{time}/channel_{channel_id}/playlists/playlists.csv')
+            f'./updates/{time}/channels/{channel_id}/playlists/playlists.csv')
         for _, playlist in playlists.iterrows():
-            playlist = Playlist(youtube_auth=youtube_auth,
+            playlist = Playlist(authentication=authentication,
                                 id=playlist.id,
                                 title=playlist.title,
                                 build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
-                f'./{time}/channel_{channel_id}/{playlist.title}.csv', index=False)
+                f'./updates/{time}/channels/{channel_id}/{playlist.title}.csv', index=False)
 
 
 def save_logs(logs: list):
@@ -44,7 +79,7 @@ def save_logs(logs: list):
     Path(f'logs').mkdir(parents=True, exist_ok=True)
 
     # Get the versions
-    with open('versions.txt', 'r') as f_in:
+    with open('updates/versions.txt', 'r') as f_in:
         versions = f_in.read().splitlines(True)
 
     log_time = versions[1].replace('\n', '')
@@ -60,29 +95,18 @@ def save_logs(logs: list):
 
 def remove_old_version():
 
-    with open('versions.txt', 'r') as f_in:
+    with open('updates/versions.txt', 'r') as f_in:
         versions = f_in.read().splitlines(True)
 
     old_version = versions[0].replace('\n', '')
 
-    with open('versions.txt', 'w') as f_out:
+    with open('updates/versions.txt', 'w') as f_out:
         versions = f_out.write(versions[1])
 
-    shutil.rmtree(f'./{old_version}/')
+    shutil.rmtree(f'./updates/{old_version}/')
 
 
 def remove_all_data():
 
-    with open('versions.txt', 'r') as f:
-        versions = f.read().splitlines(True)
-
-    # Remove old and updated version
-    for version in versions:
-        version = version.replace('\n', '')
-        shutil.rmtree(f'./{version}/')
-
-    os.remove('versions.txt')
-
-
-if __name__ == "__main__":
-    saved_logs()
+    shutil.rmtree(f'./updates/')
+    Path('updates').mkdir(parents=True, exist_ok=True)

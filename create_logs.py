@@ -18,6 +18,23 @@ class LogsCreation:
 
         self._store_item_messages()
 
+    def _store_channel_messages(self):
+        # Old channels
+        for channel_name in self.dict_res_comparison['old_channels'].key():
+            message = f'You stopped following the channel {channel_name}'
+            self.logs.append(
+                {'message': message, 'type': 'remove_channel',
+                    'channel_name': channel_name}
+            )
+
+        # New channels
+        for channel_name in self.dict_res_comparison['new_channels'].key():
+            message = f'You are now following the channel {channel_name}'
+            self.logs.append(
+                {'message': message, 'type': 'create_channel',
+                    'channel_name': channel_name}
+            )
+
     def _store_playlist_messages(self):
         # Loop over the common channels
         for channel_name, common_chanel in self.dict_res_comparison['common_channels'].items():
@@ -26,16 +43,16 @@ class LogsCreation:
                 for playlist_name, playlist in common_chanel['old_playlists'].items():
                     message = f'The playlist {playlist_name} has been removed.'
                     self.logs.append(
-                        {'message': message, 'type': 'remove_playlist'})
+                        {'message': message, 'type': 'remove_playlist', 'playlist_name': playlist_name})
                     # Loop over items in the created playlist
                     if playlist:
                         for item_id, item in playlist['items'].items():
                             item_title = item['title']
                             message = f'The video {item_title} has been removed from the playlist {playlist_name} because the playlist {playlist_name} has been removed.'
                             self.logs.append(
-                                {'message': message, 'type': 'remove_item'})
+                                {'message': message, 'type': 'remove_item', 'item_title': item_title, 'playlist_name': playlist_name})
 
-            # New
+            # New playlists
             if common_chanel['new_playlists']:
                 for playlist_name, playlist in common_chanel['new_playlists'].items():
                     message = f'The playlist {playlist_name} has been created.'
@@ -47,7 +64,7 @@ class LogsCreation:
                             item_title = item['title']
                             message = f'The video {item_title} has been added to the playlist {playlist_name}.'
                             self.logs.append(
-                                {'message': message, 'type': 'create_item'})
+                                {'message': message, 'type': 'create_item', playlist: 'playlist_name'})
 
     def _store_item_messages(self):
 
@@ -61,14 +78,14 @@ class LogsCreation:
                         item_title = item['title']
                         message = f'The video {item_title} has been removed from the playlist {playlist_name}.'
                         self.logs.append(
-                            {'message': message, 'type': 'remove_item'})
+                            {'message': message, 'type': 'remove_item', 'playlist_name': playlist_name})
                 # New items
                 if common_playlist['new_items']:
                     for item_id, item in common_playlist['new_items'].items():
                         item_title = item['title']
                         message = f'The video {item_title} has been added to the playlist {playlist_name}.'
                         self.logs.append(
-                            {'message': message, 'type': 'add_item'})
+                            {'message': message, 'type': 'add_item', 'playlist_name': playlist_name})
 
 
 def run_logs_workflow():

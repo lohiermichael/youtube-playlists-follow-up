@@ -6,38 +6,44 @@ from datetime import datetime
 from googleapiclient.discovery import build
 import pandas as pd
 
+from authentication import Authentication
 
 
 api_key = os.environ['PROJECT_API_KEY']
 username = os.environ['YOUTUBE_USERNAME']
 
-global youtube
-youtube = build(serviceName='youtube',
-                version='v3',
-                developerKey=api_key)
-
-
-class User:
-    def __init__(self, name):
-        self.name = name
-        self.channels_ids = self._get_channels_ids()
-
-    def _get_channels_ids(self) -> list:
-        request = youtube.channels().list(
-            part='snippet',
-            forUsername=self.name
-        )
-        response = request.execute()
-
-        return [channel['id'] for channel in response['items']]
-
 
 class Channel:
-    def __init__(self, youtube_auth, id, update_time=None, build=False):
-        self.youtube_auth = youtube_auth
+    def __init__(self,
+                 authentication: Authentication,
+                 id=None,
+                 username=None,
+                 mine: bool = True,
+                 update_time=None,
+                 build=False):
+
+        self.youtube = authentication.youtube
         self.id = id
+        self.username = username
+        self.mine = mine
+
+        assert self.username or self.mine, "You need a username or set that it is your channel to create a Channel"
+
         if build:
+
+            if mine:
+                self.api_response = self._get_info_your_channel()
+
+            elif self.username:
+                self.api_response = self._get_info_by_user_name()
+
+            self.id = self.api_response['items'][0]['id']
+            self.published_at = self.api_response['items'][0]['snippet']['publishedAt']
+            self.description = self.api_response['items'][0]['snippet']['description']
+            self.title = self.api_response['items'][0]['snippet']['title']
+
             self.playlists = self._get_playlists()
+
         else:  # Already stored
             self.update_time = update_time
             self.playlists = pd.read_csv(
@@ -53,9 +59,29 @@ class Channel:
         playlists_str = ', '.join(self.playlists['title'])
         return f'Channel(playlists({playlists_str}))'
 
+    def _get_info_by_user_name(self) -> dict:
+
+        request = self.youtube.channels().list(
+            part='snippet',
+            forUsername=self.username
+        )
+        response = request.execute()
+
+        return response
+
+    def _get_info_your_channel(self) -> dict:
+
+        request = self.youtube.channels().list(
+            part='snippet',
+            mine=True
+        )
+        response = request.execute()
+
+        return response
+
     def _get_playlists(self) -> pd.DataFrame:
         # List playlists of my channel
-        request = youtube.playlists().list(
+        request = self.youtube.playlists().list(
             part='snippet',
             channelId=self.id,
             maxResults=50
@@ -71,8 +97,8 @@ class Channel:
 
 
 class Playlist():
-    def __init__(self, id, youtube_auth, title, of_channel: Channel = None, build=False):
-        self.youtube_auth = youtube_auth
+    def __init__(self, id, authentication: Authentication, title, of_channel: Channel = None, build=False):
+        self.youtube = authentication.youtube
         self.id = id
         self.title = title
         if build:
@@ -94,7 +120,7 @@ class Playlist():
         next_page_token = None
 
         while True:
-            request = youtube.playlistItems().list(
+            request = self.youtube.playlistItems().list(
                 part='snippet',
                 playlistId=self.id,
                 maxResults=50,
