@@ -33,5 +33,10 @@ def index_show_logs():
     return render_template('logs.html', **locals())
 
 
+@app.route('/channels')
+def index_channels():
+    return render_template('channels/index.html', **locals())
+
+
 if __name__ == __name__:
     app.run()

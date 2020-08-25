@@ -7,6 +7,7 @@ from googleapiclient.discovery import build
 import pandas as pd
 
 
+
 api_key = os.environ['PROJECT_API_KEY']
 username = os.environ['YOUTUBE_USERNAME']
 
@@ -32,7 +33,8 @@ class User:
 
 
 class Channel:
-    def __init__(self, id, update_time=None, build=False):
+    def __init__(self, youtube_auth, id, update_time=None, build=False):
+        self.youtube_auth = youtube_auth
         self.id = id
         if build:
             self.playlists = self._get_playlists()
@@ -69,7 +71,8 @@ class Channel:
 
 
 class Playlist():
-    def __init__(self, id, title, of_channel: Channel = None, build=False):
+    def __init__(self, id, youtube_auth, title, of_channel: Channel = None, build=False):
+        self.youtube_auth = youtube_auth
         self.id = id
         self.title = title
         if build:

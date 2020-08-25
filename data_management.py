@@ -7,6 +7,7 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
+from authentication import Authentication
 from models import Channel, Playlist, User
 
 
@@ -16,18 +17,22 @@ def save_data(first_time: bool, time: datetime = datetime.now()):
         f.write(f'{str(time)}\n')
 
     Path(f'{time}').mkdir(parents=True, exist_ok=True)
-    user = User(name=os.environ['YOUTUBE_USERNAME'])
+
+    youtube_auth = Authentication(auth_type='own_account')
+
     for channel_id in user.channels_ids:
         Path(f'./{time}/channel_{channel_id}').mkdir(parents=True, exist_ok=True)
-        channel = Channel(id=channel_id, build=True)
+        channel = Channel(youtube_auth=youtube_auth, id=channel_id, build=True)
         playlists = channel.playlists
         Path(
             f'./{time}/channel_{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
             f'./{time}/channel_{channel_id}/playlists/playlists.csv')
         for _, playlist in playlists.iterrows():
-            playlist = Playlist(
-                id=playlist.id, title=playlist.title, build=True)
+            playlist = Playlist(youtube_auth=youtube_auth,
+                                id=playlist.id,
+                                title=playlist.title,
+                                build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
                 f'./{time}/channel_{channel_id}/{playlist.title}.csv', index=False)
