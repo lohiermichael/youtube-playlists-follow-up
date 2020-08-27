@@ -10,6 +10,8 @@ import pandas as pd
 from authentication import Authentication
 from models import Channel, Playlist
 
+from config import FOLDER_CHANNELS, FOLDER_UPDATES
+
 
 def add_new_channel(mine: bool, username: str = None):
 
@@ -36,17 +38,17 @@ def add_new_channel(mine: bool, username: str = None):
                     'published_at': channel.published_at,
                     'description': channel.description}
 
-    with open(f'channels/{channel.id}/channel_info.json', 'w') as f:
+    with open(f'{FOLDER_CHANNELS}/{channel.id}/channel_info.json', 'w') as f:
         json.dump(channel_info, f)
 
 
 def save_data(time: datetime = datetime.now(), first_time=True):
     method = 'w' if first_time else 'a'
-    with open('updates/versions.txt', method) as f:
+    with open(f'{FOLDER_UPDATES}/versions.txt', method) as f:
         f.write(f'{str(time)}\n')
 
-    Path(f'updates/{time}').mkdir(parents=True, exist_ok=True)
-    Path(f'updates/{time}/channels').mkdir(parents=True, exist_ok=True)
+    Path(f'{FOLDER_UPDATES}/{time}').mkdir(parents=True, exist_ok=True)
+    Path(f'{FOLDER_UPDATES}/{time}/channels').mkdir(parents=True, exist_ok=True)
 
     channels_ids = [channel_id for channel_id in os.listdir(
         'channels') if channel_id != 'new_channel']
@@ -55,14 +57,14 @@ def save_data(time: datetime = datetime.now(), first_time=True):
         authentication = Authentication(
             new_client_secrets=False, channel_id=channel_id)
         Path(
-            f'./updates/{time}/channels/{channel_id}').mkdir(parents=True, exist_ok=True)
+            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}').mkdir(parents=True, exist_ok=True)
         channel = Channel(authentication=authentication,
                           id=channel_id, build=True)
         playlists = channel.playlists
         Path(
-            f'./updates/{time}/channels/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
+            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
-            f'./updates/{time}/channels/{channel_id}/playlists/playlists.csv')
+            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists/playlists.csv')
         for _, playlist in playlists.iterrows():
             playlist = Playlist(authentication=authentication,
                                 id=playlist.id,
@@ -70,7 +72,7 @@ def save_data(time: datetime = datetime.now(), first_time=True):
                                 build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
-                f'./updates/{time}/channels/{channel_id}/{playlist.title}.csv', index=False)
+                f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/{playlist.title}.csv', index=False)
 
 
 def save_logs(logs: list):
@@ -79,7 +81,7 @@ def save_logs(logs: list):
     Path(f'logs').mkdir(parents=True, exist_ok=True)
 
     # Get the versions
-    with open('updates/versions.txt', 'r') as f_in:
+    with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f_in:
         versions = f_in.read().splitlines(True)
 
     log_time = versions[1].replace('\n', '')
@@ -95,18 +97,18 @@ def save_logs(logs: list):
 
 def remove_old_version():
 
-    with open('updates/versions.txt', 'r') as f_in:
+    with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f_in:
         versions = f_in.read().splitlines(True)
 
     old_version = versions[0].replace('\n', '')
 
-    with open('updates/versions.txt', 'w') as f_out:
+    with open(f'{FOLDER_UPDATES}/versions.txt', 'w') as f_out:
         versions = f_out.write(versions[1])
 
-    shutil.rmtree(f'./updates/{old_version}/')
+    shutil.rmtree(f'./{FOLDER_UPDATES}/{old_version}/')
 
 
 def remove_all_data():
 
-    shutil.rmtree(f'./updates/')
+    shutil.rmtree(f'{FOLDER_UPDATES}/')
     Path('updates').mkdir(parents=True, exist_ok=True)

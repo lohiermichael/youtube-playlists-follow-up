@@ -92,7 +92,7 @@ def run_logs_workflow():
     print('\n')
     print('Results:')
     print('\n')
-    logs = LogsCreation('comparison_results.json').logs
+    logs = LogsCreation('{FOLDER_UPDATES}/comparison_results.json').logs
     for log in logs:
         print(log['message'])
     print('\n')

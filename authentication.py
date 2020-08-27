@@ -7,12 +7,14 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import googleapiclient.errors
 
+from config import FOLDER_CHANNELS
+
 
 class Authentication:
     def __init__(self,
                  new_client_secrets: bool = True,
                  channel_id: str = None,
-                 client_secrets_file: str = 'channels/new_channel/client_secret.json'):
+                 client_secrets_file: str = '{FOLDER_CHANNELS}/new_channel/client_secret.json'):
         """Will save in the files the auth credentials if not already done.
         The important object of Authentication is youtube, which will allow you to request the Youtube data  API.
 
@@ -24,11 +26,11 @@ class Authentication:
         self.channel_id = channel_id
 
         if self.channel_id:
-            self.client_secrets_file = f'channels/{channel_id}/client_secrets.json'
+            self.client_secrets_file = f'{FOLDER_CHANNELS}/{channel_id}/client_secrets.json'
 
         # The file of the credentials from which the channel has been created if already exists
         # It is temporarily saved under new channel, as we don't know the channel id yes
-        self.client_secrets_file = f'channels/new_channel/client_secrets.json'
+        self.client_secrets_file = f'{FOLDER_CHANNELS}/new_channel/client_secrets.json'
 
         self.scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
         self.api_service_name = 'youtube'
@@ -37,7 +39,7 @@ class Authentication:
         if new_client_secrets:
             self._get_authenticated_first_time()
             # Move the client_secrets_file under its channel id folder
-            new_destination = f'channels/{self.channel_id}/client_secrets.json'
+            new_destination = f'{FOLDER_CHANNELS}/{self.channel_id}/client_secrets.json'
             os.rename(self.client_secrets_file, new_destination)
             self.client_secrets_file = new_destination
 
@@ -67,17 +69,17 @@ class Authentication:
         self.channel_id = response['items'][0]['id']
 
         # Create a new folder for the channel
-        Path(f'channels/{self.channel_id}').mkdir(parents=True, exist_ok=True)
+        Path(f'{FOLDER_CHANNELS}/{self.channel_id}').mkdir(parents=True, exist_ok=True)
 
         # Save the credentials in a file called OAUTH_CREDENTIALS
-        self.oauth_credentials_file = f'channels/{self.channel_id}/OAUTH_CREDENTIALS'
+        self.oauth_credentials_file = f'{FOLDER_CHANNELS}/{self.channel_id}/OAUTH_CREDENTIALS'
 
         with open(self.oauth_credentials_file, 'wb') as f:
             pickle.dump(self.credentials, f)
 
     def _get_authenticated_from_file(self):
 
-        self.oauth_credentials_file = f'channels/{self.channel_id}/OAUTH_CREDENTIALS'
+        self.oauth_credentials_file = f'{FOLDER_CHANNELS}/{self.channel_id}/OAUTH_CREDENTIALS'
 
         with open(self.oauth_credentials_file, 'rb') as f:
             self.credentials = pickle.load(f)
