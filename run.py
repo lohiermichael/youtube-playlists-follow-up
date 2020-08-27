@@ -1,4 +1,4 @@
-from data_management import remove_old_version, remove_all_data, add_new_channel
+from data_management import *
 from compare_versions import run_comparison_workflow
 from create_logs import run_logs_workflow
 
@@ -6,9 +6,11 @@ from create_logs import run_logs_workflow
 def run_flow():
     # try:
     # add_new_channel(mine=True)
-    run_comparison_workflow()
-    run_logs_workflow()
-    remove_old_version()
+    initialize_folders()
+
+    # run_comparison_workflow()
+    # run_logs_workflow()
+    # remove_old_version()
 
     # except Exception as e:
     #     print(e)

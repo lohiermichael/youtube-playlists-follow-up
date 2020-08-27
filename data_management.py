@@ -13,6 +13,24 @@ from models import Channel, Playlist
 from config import FOLDER_CHANNELS, FOLDER_UPDATES
 
 
+def initialize_folders():
+    """Build the structure of the folders
+    """
+    # Create the updates folder
+    Path(FOLDER_UPDATES).mkdir(parents=True, exist_ok=True)
+
+    # Create the channels folder
+    Path(FOLDER_CHANNELS).mkdir(parents=True, exist_ok=True)
+
+    # In the channels folder make a folder of new channel
+    Path(f'{FOLDER_CHANNELS}/new_channel').mkdir(parents=True, exist_ok=True)
+
+    # In the channels folder, initialize a file history_channels as an empty dictionary
+    if not os.path.isfile(f'{FOLDER_CHANNELS}/history_channels.json'):
+        with open(f'{FOLDER_CHANNELS}/history_channels.json', 'w') as f:
+            json.dump({}, f)
+
+
 def add_new_channel(mine: bool, username: str = None):
 
     # Ask if you want new credentials or use the credentials of previous channels
