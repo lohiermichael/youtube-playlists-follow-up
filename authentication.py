@@ -16,30 +16,30 @@ class Authentication:
                  first_time: bool = None,
                  new_client_secrets: bool = None,
                  channel_id_secrets: str = None,
-                 channel_id: str: None):
+                 channel_id: str = None):
 
         # Conditions on the inputs: there are three cases
-    self.case_first_time_reuse_secrets = first_time and not new_client_secrets and channel_id_secrets
-    self.case_first_time_new_secrets = first_time and new_client_secrets
-    self.case_already_stored = not first_time
+        self.case_first_time_reuse_secrets = first_time and not new_client_secrets and channel_id_secrets
+        self.case_first_time_new_secrets = first_time and new_client_secrets
+        self.case_already_stored = not first_time
 
-    assert self.case_first_time_reuse_secrets or self.case_first_time_new_secrets or self.case_already_stored, "You are not initializing the inputs correctly"
+        assert self.case_first_time_reuse_secrets or self.case_first_time_new_secrets or self.case_already_stored, "You are not initializing the inputs correctly"
 
-    self.scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
-    self.api_service_name = 'youtube'
-    self.api_version = 'v3'
+        self.scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+        self.api_service_name = 'youtube'
+        self.api_version = 'v3'
 
-    self.first_time = first_time
-    self.new_client_secrets = new_client_secrets
-    self.channel_id_secrets = channel_id_secrets
-    self.channel_id = channel_id
-    self.client_secrets_file = self._define_client_secrets_file()
+        self.first_time = first_time
+        self.new_client_secrets = new_client_secrets
+        self.channel_id_secrets = channel_id_secrets
+        self.channel_id = channel_id
+        self.client_secrets_file = self._define_client_secrets_file()
 
-    if self.first_time:
-        self._get_authenticated_first_time()
-        self._move_client_secrets_file()
-    else:
-        self._get_authenticated_from_file()
+        if self.first_time:
+            self._get_authenticated_first_time()
+            self._move_client_secrets_file()
+        else:
+            self._get_authenticated_from_file()
 
     def _define_client_secrets_file(self):
 
