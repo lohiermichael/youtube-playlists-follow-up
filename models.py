@@ -11,10 +11,6 @@ from authentication import Authentication
 from config import FOLDER_UPDATES, FOLDER_LOGS, FOLDER_UPDATES
 
 
-api_key = os.environ['PROJECT_API_KEY']
-username = os.environ['YOUTUBE_USERNAME']
-
-
 class Channel:
     def __init__(self,
                  authentication: Authentication,

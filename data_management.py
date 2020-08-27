@@ -46,11 +46,13 @@ def add_new_channel(mine: bool,
 
     if mine:
         channel = Channel(authentication=authentication,
-                          mine=True)
+                          mine=True,
+                          build=True)
 
     elif username:
         channel = Channel(authentication=authentication,
-                          username=username)
+                          username=username,
+                          build=True)
 
     # Save information about the channel
     channel_info = {'title': channel.title,
@@ -67,10 +69,8 @@ def add_new_channel(mine: bool,
 
     history_channels[channel.id] = channel_info
 
-    with open(f'{FOLDER_CHANNELS}/histrory_channels.json', 'w') as f_out:
+    with open(f'{FOLDER_CHANNELS}/history_channels.json', 'w') as f_out:
         json.dump(history_channels, f_out)
-
-
 
 
 def save_data(time: datetime = datetime.now(), first_time=True):
