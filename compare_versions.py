@@ -8,7 +8,7 @@ from time import sleep
 import pandas as pd
 
 from data_management import save_data
-from config import FOLDER_UPDATES
+from config import FOLDER_UPDATES, FOLDER_CHANNELS
 
 
 def make_summary(old_L: list, new_L: list, print_of: bool = True) -> Tuple[list]:
@@ -63,12 +63,12 @@ class CompareVersions:
             old_L=self.old_channels, new_L=self.new_channels, print_of=False)
 
         # Store elements old channels
-        self.store_all_elements_channels(type_channels='old_channels')
+        self.store_details_channels(type_channels='old_channels')
 
         # Store new channels
-        self.store_all_elements_channels(type_channels='new_channels')
+        self.store_details_channels(type_channels='new_channels')
 
-    def store_all_elements_channels(self, type_channels: str):
+    def store_details_channels(self, type_channels: str):
 
         if type_channels == 'old_channels':
             list_channels = self.old_channels
@@ -86,16 +86,9 @@ class CompareVersions:
 
         # Store the playlists
         for channel in list_channels:
-            list_playlists = os.listdir(f'{FOLDER_UPDATES}/{self.old_version}/{channel}')
-            self.summary[type_channels][channel] = {}
-            # Store the items
-            for playlist in list_playlists:
-                self.summary['common_channels'][common_channel][type_playlists][playlist] = {
-                }
-                df_playlist = pd.read_csv(
-                    f'./{version}/{channel}/{playlist}.csv')
-                self.summary[type_channels][channel][playlist]['items'] = df_playlist.T.to_dict(
-                )
+            with open(f'{FOLDER_CHANNELS}/{channel}/channel_info.json', 'r') as f:
+                channel_info = json.load(f)
+            self.summary[type_channels][channel] = channel_info
 
     def compare_playlists(self):
 
@@ -135,8 +128,10 @@ class CompareVersions:
 
         for channel in list_common_channels:
             self.summary['common_channels'][channel] = {}
-            old_playlists = os.listdir(f'{FOLDER_UPDATES}/{self.old_version}/{channel}')
-            new_playlists = os.listdir(f'{FOLDER_UPDATES}/{self.new_version}/{channel}')
+            old_playlists = os.listdir(
+                f'{FOLDER_UPDATES}/{self.old_version}/{channel}')
+            new_playlists = os.listdir(
+                f'{FOLDER_UPDATES}/{self.new_version}/{channel}')
             common_playlists, old_playlists, new_playlists = make_summary(
                 old_L=old_playlists, new_L=new_playlists, print_of=False)
 
@@ -185,13 +180,13 @@ def run_comparison_workflow():
 
     print('\n')
     # Save for the first time
-    if not os.path.isfile('./{FOLDER_UPDATES}/versions.txt'):
+    if not os.path.isfile(f'./{FOLDER_UPDATES}/versions.txt'):
         print('Download the data for the first time')
         save_data(time=now, first_time=True)
         now = datetime.now()
 
     # Save regularly
-    with open('{FOLDER_UPDATES}/versions.txt', 'r') as f:
+    with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f:
         print('Download the latest version of the data')
         old_time = f.read().split('\n')[0]
     save_data(time=now, first_time=False)
