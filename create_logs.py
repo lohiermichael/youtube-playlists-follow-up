@@ -4,6 +4,8 @@ import shutil
 from compare_versions import run_comparison_workflow
 from data_management import save_logs
 
+from config import FOLDER_CHANNELS
+
 
 class LogsCreation:
     def __init__(self, file_comparison):
@@ -20,20 +22,27 @@ class LogsCreation:
 
     def _store_channel_messages(self):
         # Old channels
-        for channel_name in self.dict_res_comparison['old_channels'].key():
-            message = f'You stopped following the channel {channel_name}'
+        for channel_id in self.dict_res_comparison['old_channels'].key():
+            channel_title = self.get_channel_title(channel_id)
+            message = f'You stopped following the channel {channel_title}'
             self.logs.append(
                 {'message': message, 'type': 'remove_channel',
-                    'channel_name': channel_name}
+                    'channel_title': channel_title}
             )
 
         # New channels
-        for channel_name in self.dict_res_comparison['new_channels'].key():
-            message = f'You are now following the channel {channel_name}'
+        for channel_title in self.dict_res_comparison['new_channels'].key():
+            channel_title = self.get_channel_title(channel_id)
+            message = f'You are now following the channel {channel_title}'
             self.logs.append(
                 {'message': message, 'type': 'create_channel',
-                    'channel_name': channel_name}
+                    'channel_title': channel_title}
             )
+
+    def get_channel_title(self, channel_id):
+        with open(f'{FOLDER_CHANNELS}/{channel_id}/channel_info.json', 'r') as f:
+            channel_info = json.load(f)
+        return channel_info['title']
 
     def _store_playlist_messages(self):
         # Loop over the common channels
@@ -64,7 +73,7 @@ class LogsCreation:
                             item_title = item['title']
                             message = f'The video {item_title} has been added to the playlist {playlist_name}.'
                             self.logs.append(
-                                {'message': message, 'type': 'create_item', playlist: 'playlist_name'})
+                                {'message': message, 'type': 'create_item', 'item_title': item_title, 'playlist_name': playlist_name})
 
     def _store_item_messages(self):
 
@@ -78,14 +87,14 @@ class LogsCreation:
                         item_title = item['title']
                         message = f'The video {item_title} has been removed from the playlist {playlist_name}.'
                         self.logs.append(
-                            {'message': message, 'type': 'remove_item', 'playlist_name': playlist_name})
+                            {'message': message, 'type': 'remove_item', 'item_title': item_title, 'playlist_name': playlist_name})
                 # New items
                 if common_playlist['new_items']:
                     for item_id, item in common_playlist['new_items'].items():
                         item_title = item['title']
                         message = f'The video {item_title} has been added to the playlist {playlist_name}.'
                         self.logs.append(
-                            {'message': message, 'type': 'add_item', 'playlist_name': playlist_name})
+                            {'message': message, 'type': 'add_item', 'item_title': item_title, 'playlist_name': playlist_name})
 
 
 def run_logs_workflow():
