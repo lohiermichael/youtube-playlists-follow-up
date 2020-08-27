@@ -13,14 +13,13 @@ from config import FOLDER_UPDATES, FOLDER_LOGS, FOLDER_UPDATES
 
 class Channel:
     def __init__(self,
-                 authentication: Authentication,
+                 authentication: Authentication = None,
                  id=None,
                  username=None,
                  mine: bool = True,
                  update_time=None,
                  build=False):
 
-        self.youtube = authentication.youtube
         self.id = id
         self.username = username
         self.mine = mine
@@ -28,6 +27,8 @@ class Channel:
         assert self.username or self.mine, "You need a username or set that it is your channel to create a Channel"
 
         if build:
+
+            self.youtube = authentication.youtube
 
             if mine:
                 self.api_response = self._get_info_your_channel()
@@ -95,11 +96,12 @@ class Channel:
 
 
 class Playlist():
-    def __init__(self, id, authentication: Authentication, title, of_channel: Channel = None, build=False):
-        self.youtube = authentication.youtube
+    def __init__(self, id, title, authentication: Authentication = None, of_channel: Channel = None, build=False):
         self.id = id
         self.title = title
         if build:
+            self.youtube = authentication.youtube
+
             self.items = self._get_items()
         else:  # Already stored
             self.of_channel = of_channel
@@ -193,10 +195,10 @@ class LatestData():
                 self.previous_update_time = json.load(
                     f)['previous_update_time']
 
-            self.channels = [Channel(id=channel.replace('channel_', ''),
+            self.channels = [Channel(id=channel_id,
                                      build=False,
                                      update_time=self.update_time)
-                             for channel in os.listdir(f'{FOLDER_UPDATES}/{self.update_time}')]
+                             for channel_id in os.listdir(f'{FOLDER_UPDATES}/{self.update_time}/channels')]
 
 
 if __name__ == "__main__":
