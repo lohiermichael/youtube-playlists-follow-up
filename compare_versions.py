@@ -180,7 +180,7 @@ def run_comparison_workflow():
 
     print('\n')
     # Save for the first time
-    if not os.path.isfile(f'./{FOLDER_UPDATES}/versions.txt'):
+    if not os.path.isfile(f'{FOLDER_UPDATES}/versions.txt'):
         print('Download the data for the first time')
         save_data(time=now, first_time=True)
         now = datetime.now()

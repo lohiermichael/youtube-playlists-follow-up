@@ -21,7 +21,7 @@ class Authentication:
         # Conditions on the inputs: there are three cases
         self.case_first_time_reuse_secrets = first_time and not new_client_secrets and channel_id_secrets
         self.case_first_time_new_secrets = first_time and new_client_secrets
-        self.case_already_stored = not first_time
+        self.case_already_stored = not first_time and channel_id
 
         assert self.case_first_time_reuse_secrets or self.case_first_time_new_secrets or self.case_already_stored, "You are not initializing the inputs correctly"
 

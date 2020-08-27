@@ -8,9 +8,9 @@ def run_flow():
     # add_new_channel(mine=True)
     initialize_folders()
 
-    # run_comparison_workflow()
-    # run_logs_workflow()
-    # remove_old_version()
+    run_comparison_workflow()
+    run_logs_workflow()
+    remove_old_version()
 
     # except Exception as e:
     #     print(e)

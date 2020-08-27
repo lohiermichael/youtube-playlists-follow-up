@@ -81,19 +81,19 @@ def save_data(time: datetime = datetime.now(), first_time=True):
     Path(f'{FOLDER_UPDATES}/{time}').mkdir(parents=True, exist_ok=True)
     Path(f'{FOLDER_UPDATES}/{time}/channels').mkdir(parents=True, exist_ok=True)
 
-    channels_ids = [channel_id for channel_id in os.listdir(
-        'channels') if channel_id != 'new_channel']
+    channels_ids = [channel_id for channel_id in next(
+        os.walk(FOLDER_CHANNELS))[1] if channel_id != 'new_channel']
 
     for channel_id in channels_ids:
         authentication = Authentication(
-            new_client_secrets=False, channel_id=channel_id)
+            first_time=False, channel_id=channel_id)
         Path(
-            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}').mkdir(parents=True, exist_ok=True)
+            f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}').mkdir(parents=True, exist_ok=True)
         channel = Channel(authentication=authentication,
                           id=channel_id, build=True)
         playlists = channel.playlists
         Path(
-            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
+            f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
             f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists/playlists.csv')
         for _, playlist in playlists.iterrows():
