@@ -1,7 +1,105 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Your channels</h1>
+<style>
+    .container {
+        margin: 50px auto;
 
+    }
+
+    .listChannels {
+        margin-top: 20px;
+        list-style: none;
+
+    }
+
+    .channelTitle {
+        font-size: 0.8em;
+    }
+
+    .removeChannelButton {
+        display: block;
+        width: 20%;
+        margin: 0 0 0 80;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .fa.fa-tv {
+        margin-right: 10px
+    }
+</style>
+
+<div class="container">
+    <h1>Your channels</h1>
+    <ul class="listChannels">
+        {% for channel, channel_info in dict_channels.items() %}
+        <li class="channel boarded">
+            <h3>
+                <i class="fa fa-tv"></i>
+                <b>Channel</b>
+                <em class="channelTitle">{{channel_info['title']}}</em></h3>
+            <p class="detailsDisplay clickable">See details</p>
+            <ul class="channelDetails" hidden>
+                <li><em class="detail">Id: </em> {{ channel_info['id']}}</li>
+                <li> <em class="detail">Published at:</em> {{ channel_info['published_at']}}</li>
+                <li> <em class="detail">Description:</em>
+                    {{ channel_info['description']}}</li>
+            </ul>
+            <button class="removeChannelButton btn btn-block btn-outline-danger" data-toggle="modal"
+                data-target="#removeModal">Remove channel</button>
+
+        </li>
+        {% endfor %}
+
+    </ul>
+</div>
+
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" data-backdrop="static"
+    aria-labelledby="removeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeModalLabel">Remove channel confirmation</h5>
+                <button type="button" class="discard" data-dismiss="modal" aria-label="discard">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you certain that you want to stop following this channel?
+            </div>
+            <div class="modal-footer">
+                <form action="#" method="POST" class="mr-auto">
+
+                    <button type="button" class="confirmationRemove btn btn-danger">Remove channel</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hide display details
+    channels = document.getElementsByClassName('channel');
+    for (let i = 0; i < channels.length; i++) {
+        let displayDetailsButton = channels[i].getElementsByClassName('detailsDisplay')[0];
+        let channelDetails = channels[i].getElementsByClassName('channelDetails')[0];
+        displayDetailsButton.addEventListener('click', function () {
+            if (this.textContent == 'See details') {
+                this.textContent = 'Hide details';
+                this.style.color = '#ff9999';
+                channelDetails.hidden = false;
+            } else {
+                this.textContent = 'See details';
+                this.style.color = 'grey';
+                channelDetails.hidden = true;
+            }
+        })
+    }
+</script>
 
 {% endblock %}
