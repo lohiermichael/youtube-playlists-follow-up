@@ -8,6 +8,8 @@ import pandas as pd
 
 from authentication import Authentication
 
+from config import FOLDER_UPDATES, FOLDER_LOGS, FOLDER_UPDATES
+
 
 api_key = os.environ['PROJECT_API_KEY']
 username = os.environ['YOUTUBE_USERNAME']
@@ -47,7 +49,7 @@ class Channel:
         else:  # Already stored
             self.update_time = update_time
             self.playlists = pd.read_csv(
-                f'{self.update_time}/channel_{self.id}/playlists/playlists.csv')
+                f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.id}/playlists/playlists.csv')
 
     def __iter__(self):
         return [Playlist(id=playlist['id'],
@@ -107,7 +109,7 @@ class Playlist():
             self.of_channel = of_channel
             self.update_time = of_channel.update_time
             self.items = pd.read_csv(
-                f'{self.update_time}/channel_{self.of_channel.id}/{self.title}.csv')
+                f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.of_channel.id}/{self.title}.csv')
 
     def __repr__(self):
         items_str = len(self.items)
@@ -155,34 +157,32 @@ class LogsByUpdate(list):
 
     def __init__(self):
 
-        if not 'logs' in os.listdir():
+        if not os.listdir(FOLDER_LOGS):
             self.update_times = []
 
         else:
             self.update_times = [update_time.replace(
-                '.json', '') for update_time in os.listdir('logs')]
+                '.json', '') for update_time in os.listdir(FOLDER_LOGS)]
 
             # Put the latest first
             self.update_times.sort(reverse=True)
 
             for update_time in self.update_times:
-                with open(f'logs/{update_time}.json') as f:
+                with open(f'{FOLDER_LOGS}/{update_time}.json') as f:
                     logs_for_update = json.load(f)
                 self.append(logs_for_update)
 
 
 class LatestData():
     def __init__(self):
-        if 'versions.txt' not in os.listdir('.') or 'logs' not in os.listdir('.'):
-            # Remove any possible old folder of data
-            for data_folder in os.listdir('.'):
-                current_year = str(datetime.now().year)
-                if data_folder.startswith(current_year):
-                    shutil.rmtree(f'./{data_folder}/')
-
-                # Remove versions.txt
-            if os.path.exists('versions.txt'):
-                os.remove('versions.txt')
+        # Remove any possible old folder of data
+        if 'versions.txt' not in os.listdir(FOLDER_UPDATES):
+            shutil.rmtree(FOLDER_UPDATES)
+            raise Exception('versions.txt was not present in the files')
+        if not os.listdir(FOLDER_LOGS):
+            shutil.rmtree(FOLDER_LOGS)
+            raise Exception(
+                "We can't get the latest data as the log file is empty")
 
             self.channels = []
             self.update_time = None
@@ -190,17 +190,17 @@ class LatestData():
 
         else:
 
-            with open('versions.txt', 'r') as f:
+            with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f:
                 self.update_time = f.read().replace('\n', '')
 
-            with open(f'logs/{self.update_time}.json', 'r') as f:
+            with open(f'{FOLDER_LOGS}/{self.update_time}.json', 'r') as f:
                 self.previous_update_time = json.load(
                     f)['previous_update_time']
 
             self.channels = [Channel(id=channel.replace('channel_', ''),
                                      build=False,
                                      update_time=self.update_time)
-                             for channel in os.listdir(f'{self.update_time}')]
+                             for channel in os.listdir(f'{FOLDER_UPDATES}/{self.update_time}')]
 
 
 if __name__ == "__main__":
