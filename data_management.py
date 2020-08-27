@@ -31,20 +31,22 @@ def initialize_folders():
             json.dump({}, f)
 
 
-def add_new_channel(mine: bool, username: str = None):
+def add_new_channel(mine: bool,
+                    username: str = None,
+                    new_client_secrets: bool = None,
+                    channel_id_secrets: str = None):
 
-    # Ask if you want new credentials or use the credentials of previous channels
-    new_client_secrets = False
     if new_client_secrets:
-        authentication = Authentication(new_client_secrets=True)
+        authentication = Authentication(first_time=True,
+                                        new_client_secrets=True)
     else:
-        channel_id_cred = 'UCgJ4y17GAgzlLpqIJbj9gVQ'
-        authentication = Authentication(
-            new_client_secrets=False, channel_id=channel_id_cred)
+        authentication = Authentication(first_time=True,
+                                        new_client_secrets=False,
+                                        channel_id_secrets=channel_id_secrets)
 
     if mine:
         channel = Channel(authentication=authentication,
-                          mine=True, build=True)
+                          mine=True)
 
     elif username:
         channel = Channel(authentication=authentication,
@@ -58,6 +60,17 @@ def add_new_channel(mine: bool, username: str = None):
 
     with open(f'{FOLDER_CHANNELS}/{channel.id}/channel_info.json', 'w') as f:
         json.dump(channel_info, f)
+
+    # Save the channel in history
+    with open(f'{FOLDER_CHANNELS}/history_channels.json', 'r') as f_in:
+        history_channels = json.load(f_in)
+
+    history_channels[channel.id] = channel_info
+
+    with open(f'{FOLDER_CHANNELS}/histrory_channels.json', 'w') as f_out:
+        json.dump(history_channels, f_out)
+
+
 
 
 def save_data(time: datetime = datetime.now(), first_time=True):
