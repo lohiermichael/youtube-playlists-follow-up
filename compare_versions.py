@@ -87,10 +87,10 @@ class CompareVersions:
         self.summary[type_channels] = {}
 
         # Store the playlists
-        for channel in list_channels:
-            with open(f'{FOLDER_CHANNELS}/{channel}/channel_info.json', 'r') as f:
-                channel_info = json.load(f)
-            self.summary[type_channels][channel] = channel_info
+        for channel_id in list_channels:
+            with open(f'{FOLDER_CHANNELS}/history_channels.json', 'r') as f:
+                history_channels = json.load(f)
+            self.summary[type_channels][channel_id] = history_channels[channel_id]
 
     def compare_playlists(self):
 

@@ -20,10 +20,12 @@ class LogsCreation:
 
         self._store_item_messages()
 
+        self._store_channel_messages()
+
     def _store_channel_messages(self):
         # Old channels
-        for channel_id in self.dict_res_comparison['old_channels'].key():
-            channel_title = self.get_channel_title(channel_id)
+        for _, channel_info in self.dict_res_comparison['old_channels'].items():
+            channel_title = channel_info['title']
             message = f'You stopped following the channel {channel_title}'
             self.logs.append(
                 {'message': message, 'type': 'remove_channel',
@@ -31,18 +33,13 @@ class LogsCreation:
             )
 
         # New channels
-        for channel_title in self.dict_res_comparison['new_channels'].key():
-            channel_title = self.get_channel_title(channel_id)
+        for _, channel_info in self.dict_res_comparison['new_channels'].items():
+            channel_title = channel_info['title']
             message = f'You are now following the channel {channel_title}'
             self.logs.append(
                 {'message': message, 'type': 'create_channel',
                     'channel_title': channel_title}
             )
-
-    def get_channel_title(self, channel_id):
-        with open(f'{FOLDER_CHANNELS}/{channel_id}/channel_info.json', 'r') as f:
-            channel_info = json.load(f)
-        return channel_info['title']
 
     def _store_playlist_messages(self):
         # Loop over the common channels
