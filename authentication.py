@@ -19,9 +19,10 @@ class Authentication:
                  channel_id: str = None):
 
         # Conditions on the inputs: there are three cases
-        self.case_first_time_reuse_secrets = first_time and not new_client_secrets and channel_id_secrets
+        self.case_first_time_reuse_secrets = first_time and not new_client_secrets and bool(
+            channel_id_secrets)
         self.case_first_time_new_secrets = first_time and new_client_secrets
-        self.case_already_stored = not first_time and channel_id
+        self.case_already_stored = not first_time and bool(channel_id)
 
         assert self.case_first_time_reuse_secrets or self.case_first_time_new_secrets or self.case_already_stored, "You are not initializing the inputs correctly"
 
@@ -48,7 +49,7 @@ class Authentication:
         elif self.case_first_time_new_secrets:
             return f'{FOLDER_CHANNELS}/new_channel/client_secrets.json'
         elif self.case_already_stored:
-            return f'{FOLDER_CHANNELS}/{channel_id}/client_secrets.json'
+            return f'{FOLDER_CHANNELS}/{self.channel_id}/client_secrets.json'
 
     def _get_authenticated_first_time(self):
 

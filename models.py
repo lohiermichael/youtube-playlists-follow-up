@@ -45,7 +45,7 @@ class Channel:
         else:  # Already stored
             self.update_time = update_time
             self.playlists = pd.read_csv(
-                f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.id}/playlists/playlists.csv')
+                f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.id}/playlists.csv')
 
     def __iter__(self):
         return [Playlist(id=playlist['id'],
@@ -105,7 +105,7 @@ class Playlist():
             self.of_channel = of_channel
             self.update_time = of_channel.update_time
             self.items = pd.read_csv(
-                f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.of_channel.id}/{self.title}.csv')
+                f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.of_channel.id}/playlists/{self.title}.csv')
 
     def __repr__(self):
         items_str = len(self.items)

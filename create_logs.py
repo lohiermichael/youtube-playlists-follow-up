@@ -4,7 +4,7 @@ import shutil
 from compare_versions import run_comparison_workflow
 from data_management import save_logs
 
-from config import FOLDER_CHANNELS
+from config import FOLDER_CHANNELS, FOLDER_UPDATES
 
 
 class LogsCreation:
@@ -101,7 +101,7 @@ def run_logs_workflow():
     print('\n')
     print('Results:')
     print('\n')
-    logs = LogsCreation('{FOLDER_UPDATES}/comparison_results.json').logs
+    logs = LogsCreation(f'{FOLDER_UPDATES}/comparison_results.json').logs
     for log in logs:
         print(log['message'])
     print('\n')

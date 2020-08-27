@@ -52,12 +52,14 @@ class CompareVersions:
         self._save_comparison_results()
 
     def _save_comparison_results(self):
-        with open('comparison_results.json', 'w') as f:
+        with open(f'{FOLDER_UPDATES}/comparison_results.json', 'w') as f:
             json.dump(self.summary, f)
 
     def compare_channels(self):
-        self.old_channels = os.listdir(f'{FOLDER_UPDATES}/{self.old_version}')
-        self.new_channels = os.listdir(f'{FOLDER_UPDATES}/{self.new_version}')
+        self.old_channels = os.listdir(
+            f'{FOLDER_UPDATES}/{self.old_version}/channels')
+        self.new_channels = os.listdir(
+            f'{FOLDER_UPDATES}/{self.new_version}/channels')
 
         self.summary['common_channels'], self.summary['old_channels'], self.summary['new_channels'] = make_summary(
             old_L=self.old_channels, new_L=self.new_channels, print_of=False)
@@ -129,9 +131,9 @@ class CompareVersions:
         for channel in list_common_channels:
             self.summary['common_channels'][channel] = {}
             old_playlists = os.listdir(
-                f'{FOLDER_UPDATES}/{self.old_version}/{channel}')
+                f'{FOLDER_UPDATES}/{self.old_version}/channels/{channel}/playlists')
             new_playlists = os.listdir(
-                f'{FOLDER_UPDATES}/{self.new_version}/{channel}')
+                f'{FOLDER_UPDATES}/{self.new_version}/channels/{channel}/playlists')
             common_playlists, old_playlists, new_playlists = make_summary(
                 old_L=old_playlists, new_L=new_playlists, print_of=False)
 
@@ -142,9 +144,6 @@ class CompareVersions:
                 '.csv', ''), old_playlists))
             new_playlists = list(map(lambda element: element.replace(
                 '.csv', ''), new_playlists))
-
-            # Remove playlists
-            common_playlists.remove('playlists')
 
             self.summary['common_channels'][channel]['common_playlists'] = common_playlists
             self.summary['common_channels'][channel]['old_playlists'] = old_playlists
@@ -158,9 +157,9 @@ class CompareVersions:
                 self.summary['common_channels'][channel]['common_playlists'][playlist] = {
                 }
                 df_old_playlist = pd.read_csv(
-                    f'./{FOLDER_UPDATES}/{self.old_version}/{channel}/{playlist}.csv')
+                    f'./{FOLDER_UPDATES}/{self.old_version}/channels/{channel}/playlists/{playlist}.csv')
                 df_new_playlist = pd.read_csv(
-                    f'./{FOLDER_UPDATES}/{self.new_version}/{channel}/{playlist}.csv')
+                    f'./{FOLDER_UPDATES}/{self.new_version}/channels/{channel}/playlists/{playlist}.csv')
                 common_items, old_items, new_items = make_summary(
                     old_L=list(df_old_playlist.title), new_L=list(df_new_playlist.title), print_of=False)
 

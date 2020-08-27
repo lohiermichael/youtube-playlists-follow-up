@@ -95,7 +95,7 @@ def save_data(time: datetime = datetime.now(), first_time=True):
         Path(
             f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
-            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists/playlists.csv')
+            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists.csv')
         for _, playlist in playlists.iterrows():
             playlist = Playlist(authentication=authentication,
                                 id=playlist.id,
@@ -103,7 +103,7 @@ def save_data(time: datetime = datetime.now(), first_time=True):
                                 build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
-                f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/{playlist.title}.csv', index=False)
+                f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists/{playlist.title}.csv', index=False)
 
 
 def save_logs(logs: list):
