@@ -34,9 +34,9 @@
 
 <div class="container">
     <h1>Your channels</h1>
-    <ul class="listChannels">
+    <ul class="listChannels mt-3">
         {% for channel, channel_info in dict_channels.items() %}
-        <li class="channel boarded">
+        <li class="channel boarded mt-5">
             <h3>
                 <i class="fa fa-tv"></i>
                 <b>Channel</b>
@@ -48,8 +48,11 @@
                 <li> <em class="detail">Description:</em>
                     {{ channel_info['description']}}</li>
             </ul>
-            <button class="removeChannelButton btn btn-block btn-outline-danger" data-toggle="modal"
-                data-target="#removeModal">Unfollow channel</button>
+            <form action="/channels/delete/{{ channel_info['id']}}" method="POST" class="mr-auto">
+                <button class="removeChannelButton btn btn-block btn-outline-danger">Unfollow channel</button>
+                <!-- TODO <button class="removeChannelButton btn btn-block btn-outline-danger" data-toggle="modal"
+                    data-target="#removeModal">Unfollow channel</button>  -->
+            </form>
 
         </li>
         {% endfor %}
@@ -57,12 +60,13 @@
     </ul>
 </div>
 
+<!-- Modal -->
 <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" data-backdrop="static"
     aria-labelledby="removeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="removeModalLabel">Remove channel confirmation</h5>
+                <h5 class="modal-title" id="removeModalLabel">Unfollow channel confirmation</h5>
                 <button type="button" class="discard" data-dismiss="modal" aria-label="discard">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -71,9 +75,8 @@
                 Are you certain that you want to stop following this channel?
             </div>
             <div class="modal-footer">
-                <form action="#" method="POST" class="mr-auto">
-
-                    <button type="button" class="confirmationRemove btn btn-danger">Remove channel</button>
+                <form action="" method="POST" class="mr-auto">
+                    <button type="button" class="confirmationRemove btn btn-danger">Unfollow</button>
                 </form>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
 
@@ -82,6 +85,9 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block script %}
 <script>
     // Hide display details
     channels = document.getElementsByClassName('channel');
