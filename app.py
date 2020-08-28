@@ -59,9 +59,19 @@ def unfollow_channel(channel_id):
     return redirect('/channels')
 
 
-@app.route('/channels/new')
-def create_channel():
-    return render_template('channels/new.html')
+@app.route('/channels/new/strategy_choice')
+def choose_strategy():
+    return render_template('channels/new/strategy_choice.html')
+
+
+@app.route('/channels/new/new_credentials')
+def new_credentials():
+    return render_template('channels/new/new_credentials.html')
+
+
+@app.route('/channels/new/old_channel_credentials')
+def old_credentials():
+    return render_template('channels/new/old_channel_credentials.html')
 
 
 if __name__ == __name__:

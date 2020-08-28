@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        width: 50%;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-style: italic;
+    }
+</style>
+
+<div class="container">
+    <h1>Follow a new channel</h1>
+    <!-- First question -->
+    <div class="container">
+        <h4 class="mt-5 mb-5 text-center">To create a new channel, you have two options:</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <a class="btn btn-block btn-outline-dark p-4 font-weight-bold"
+                    href="/channels/new/old_channel_credentials">Use old channel credentials</a>
+
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-block btn-outline-dark p-4 font-weight-bold" href="/channels/new/new_credentials">Use
+                    new credentials</a>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock %}
