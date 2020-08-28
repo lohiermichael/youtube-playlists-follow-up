@@ -32,10 +32,11 @@
 
     }
 
-    #listPlaylists {
+    .listPlaylists {
         margin-top: 20px;
         list-style: none;
     }
+
 
 
 
@@ -51,6 +52,16 @@
 
     .listItems {
         list-style: none;
+    }
+
+    #listChannels {
+        margin-top: 20px;
+        list-style: none;
+    }
+
+
+    .channelName {
+        font-size: 1.3em
     }
 </style>
 
@@ -75,22 +86,31 @@
 <!-- Latest update data -->
 
 <div class="container">
-    {% for channel in latest_data.channels %}
-    <ul id="listPlaylists">
-        {% for playlist in channel %}
-        <li class="playlist boarded">
-            <p class="playlistName clickable">
-                <i class="fa fa-list"></i>
-                {{ playlist.title }}
+    <ul id=listChannels>
+        {% for channel in latest_data.channels %}
+        <li class="channel boarded">
+            <p class="channelName clickable">
+                <i class="fa fa-tv"></i>
+                <b>Channel</b> <em>{{ channel.title }}</em>
             </p>
-            <ul class="listItems" hidden>
-                {% for _, item in playlist.items.iterrows() %}
-                <li class="item">
-                    <i class="fa fa-youtube"></i> {{ item['title'] }}
-                    <p class="detailsDisplay clickable">See details</p>
-                    <ul class="itemDetails" hidden>
-                        <li><em class="detail">Publication time:</em> {{ item['publishedAt']}}</li>
-                        <li> <em class="detail">Description:</em> {{ item['description']}}</li>
+            <ul class="listPlaylists" hidden>
+                {% for playlist in channel %}
+                <li class="playlist boarded">
+                    <p class="playlistName clickable">
+                        <i class="fa fa-list"></i>
+                        {{ playlist.title }}
+                    </p>
+                    <ul class="listItems" hidden>
+                        {% for _, item in playlist.items.iterrows() %}
+                        <li class="item">
+                            <i class="fa fa-youtube"></i> {{ item['title'] }}
+                            <p class="detailsDisplay clickable">See details</p>
+                            <ul class="itemDetails" hidden>
+                                <li><em class="detail">Publication time:</em> {{ item['publishedAt']}}</li>
+                                <li> <em class="detail">Description:</em> {{ item['description']}}</li>
+                            </ul>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </li>
                 {% endfor %}
@@ -98,7 +118,6 @@
         </li>
         {% endfor %}
     </ul>
-    {% endfor %}
 </div>
 {% endblock %}
 
@@ -106,48 +125,68 @@
 
 <!-- <script src="{{url_for('static', filename='js/index.js')}}"></script> -->
 <script>
-
-    // Hide/display items on click of playlist
-    let listPlaylists = document.getElementById('listPlaylists')
-
-    if (listPlaylists !== null) {
-        let playlistsNames = listPlaylists.getElementsByClassName('playlistName');
-        let listItems = listPlaylists.getElementsByClassName('listItems');
-
-        for (let i = 0; i < playlistsNames.length; i++) {
-            playlistsNames[i].addEventListener('click', function () {
-                if (listItems[i].hidden) {
-                    listItems[i].hidden = false;
+    let listChannels = document.getElementById('listChannels');
+    let channelsNames = listChannels.getElementsByClassName('channelName');
+    let listPlaylists = listChannels.getElementsByClassName('listPlaylists');
+    if (listChannels !== null) {
+        for (let i = 0; i < channelsNames.length; i++) {
+            // Hide/Display the playlists
+            channelsNames[i].addEventListener('click', function () {
+                if (listPlaylists[i].hidden) {
+                    listPlaylists[i].hidden = false;
                     this.style.color = '#ff9999';
                 } else {
-                    listItems[i].hidden = true;
+                    listPlaylists[i].hidden = true;
                     this.style.color = 'black';
                 }
             })
+
         }
-
-        for (let i = 0; i < playlistsNames.length; i++) {
-
-            let items = listItems[i].getElementsByClassName('item');
-            for (let j = 0; j < items.length; j++) {
-                let displayDetailsButton = items[j].getElementsByClassName('detailsDisplay')[0];
-                let itemsDetails = items[j].getElementsByClassName('itemDetails')[0];
-                displayDetailsButton.addEventListener('click', function () {
-                    if (this.textContent == 'See details') {
-                        this.textContent = 'Hide details';
-                        this.style.color = '#ff9999';
-                        itemsDetails.hidden = false;
-                    } else {
-                        this.textContent = 'See details';
-                        this.style.color = 'grey';
-                        itemsDetails.hidden = true;
-
-                    }
-                })
-            }
-        }
-
     }
+
+    
+
+    // // Hide/display items on click of playlist
+    // let listPlaylists = document.getElementById('listPlaylists')
+
+    // if (listPlaylists !== null) {
+    //     let playlistsNames = listPlaylists.getElementsByClassName('playlistName');
+    //     let listItems = listPlaylists.getElementsByClassName('listItems');
+
+    //     for (let i = 0; i < playlistsNames.length; i++) {
+    //         playlistsNames[i].addEventListener('click', function () {
+    //             if (listItems[i].hidden) {
+    //                 listItems[i].hidden = false;
+    //                 this.style.color = '#ff9999';
+    //             } else {
+    //                 listItems[i].hidden = true;
+    //                 this.style.color = 'black';
+    //             }
+    //         })
+    //     }
+
+    //     for (let i = 0; i < playlistsNames.length; i++) {
+
+    //         let items = listItems[i].getElementsByClassName('item');
+    //         for (let j = 0; j < items.length; j++) {
+    //             let displayDetailsButton = items[j].getElementsByClassName('detailsDisplay')[0];
+    //             let itemsDetails = items[j].getElementsByClassName('itemDetails')[0];
+    //             displayDetailsButton.addEventListener('click', function () {
+    //                 if (this.textContent == 'See details') {
+    //                     this.textContent = 'Hide details';
+    //                     this.style.color = '#ff9999';
+    //                     itemsDetails.hidden = false;
+    //                 } else {
+    //                     this.textContent = 'See details';
+    //                     this.style.color = 'grey';
+    //                     itemsDetails.hidden = true;
+
+    //                 }
+    //             })
+    //         }
+    //     }
+
+    // }
 
 
     // Click on update
@@ -166,4 +205,3 @@
     })
 </script>
 {% endblock %}
-

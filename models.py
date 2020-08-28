@@ -8,7 +8,7 @@ import pandas as pd
 
 from authentication import Authentication
 
-from config import FOLDER_UPDATES, FOLDER_LOGS, FOLDER_UPDATES
+from config import FOLDER_CHANNELS, FOLDER_LOGS, FOLDER_UPDATES
 
 
 class Channel:
@@ -47,6 +47,13 @@ class Channel:
             self.update_time = update_time
             self.playlists = pd.read_csv(
                 f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.id}/playlists.csv')
+
+            with open(f'{FOLDER_CHANNELS}/{self.id}/channel_info.json', 'r') as f:
+                channel_info = json.load(f)
+
+            self.published_at = channel_info['published_at']
+            self.descripion = channel_info['description']
+            self.title = channel_info['title']
 
     def __iter__(self):
         return [Playlist(id=playlist['id'],
@@ -203,4 +210,5 @@ class LatestData():
 
 if __name__ == "__main__":
     l = LatestData()
-    print(l.channels)
+    channel1 = l.channels[0]
+    print(channel1.title)
