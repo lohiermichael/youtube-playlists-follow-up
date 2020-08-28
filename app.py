@@ -59,5 +59,10 @@ def unfollow_channel(channel_id):
     return redirect('/channels')
 
 
+@app.route('/channels/create')
+def create_channel():
+    return render_template('channels/new.html')
+
+
 if __name__ == __name__:
     app.run()

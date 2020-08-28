@@ -20,7 +20,16 @@
     .removeChannelButton {
         display: block;
         width: 20%;
-        margin: 0 0 0 80;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    #newChannelButton {
+        display: block;
+        width: 20%;
+        margin: 0 auto;
         font-size: 16px;
         cursor: pointer;
         text-align: center;
@@ -60,6 +69,10 @@
     </ul>
 </div>
 
+<div class="container">
+    <a class="btn btn-block btn-outline-success" id="newChannelButton" href="/channels/create">Follow a new channel</a>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" data-backdrop="static"
     aria-labelledby="removeModalLabel" aria-hidden="true">
@@ -78,7 +91,7 @@
                 <form action="" method="POST" class="mr-auto">
                     <button type="button" class="confirmationRemove btn btn-danger">Unfollow</button>
                 </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+                <a type="button" class="btn btn-secondary" data-dismiss="modal" href="channels/create">Discard</a>
 
             </div>
         </div>
