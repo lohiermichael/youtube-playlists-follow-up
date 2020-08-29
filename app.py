@@ -14,7 +14,6 @@ app = Flask(__name__, static_url_path='/static/')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    initialize_folders()
 
     if request.method == 'POST':
         run_flow()
