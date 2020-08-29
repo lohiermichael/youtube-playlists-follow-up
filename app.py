@@ -5,14 +5,16 @@ import shutil
 from flask import Flask, render_template, request, redirect
 
 from config import FOLDER_CHANNELS
-from models import LogsByUpdate, LatestData
+from models import LogsByUpdate, LatestData, SavedChannels
 from run import run_flow
+from data_management import add_new_channel, initialize_folders
 
 app = Flask(__name__, static_url_path='/static/')
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    initialize_folders()
 
     if request.method == 'POST':
         run_flow()
@@ -37,14 +39,7 @@ def index_show_logs():
 @app.route('/channels')
 def index_channels():
 
-    channel_ids = [channel_id for channel_id in next(
-        os.walk(FOLDER_CHANNELS))[1] if channel_id != 'new_channel']
-
-    with open(f'{FOLDER_CHANNELS}/history_channels.json', 'r') as f:
-        history_channels = json.load(f)
-
-    dict_channels = {
-        channel_id: history_channels[channel_id] for channel_id in channel_ids}
+    dict_channels = SavedChannels()
 
     return render_template('channels/index.html', **locals())
 
@@ -71,8 +66,24 @@ def new_credentials():
 
 @app.route('/channels/new/old_channel_credentials')
 def old_credentials():
-    return render_template('channels/new/old_channel_credentials.html')
+
+    dict_channels = SavedChannels()
+
+    return render_template('channels/new/old_channel_credentials.html', **locals())
+
+
+@app.route('/channels/create', methods=['POST'])
+def create_channel():
+
+    add_new_channel(mine=True,
+                    new_client_secrets=False,
+                    channel_id_secrets=request.form['channelChoice']
+                    )
+
+    return redirect('/channels')
 
 
 if __name__ == __name__:
+
+    initialize_folders()
     app.run()

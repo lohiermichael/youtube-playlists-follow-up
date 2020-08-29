@@ -178,16 +178,16 @@ class LogsByUpdate(list):
                 self.append(logs_for_update)
 
 
-class LatestData():
+class LatestData:
     def __init__(self):
         # Remove any possible old folder of data
         if 'versions.txt' not in os.listdir(FOLDER_UPDATES):
             shutil.rmtree(FOLDER_UPDATES)
-            raise Exception('versions.txt was not present in the files')
-        if not os.listdir(FOLDER_LOGS):
+            # raise Exception('versions.txt was not present in the files')
+        elif not os.listdir(FOLDER_LOGS):
             shutil.rmtree(FOLDER_LOGS)
-            raise Exception(
-                "We can't get the latest data as the log file is empty")
+            # raise Exception(
+            #     "We can't get the latest data as the log file is empty")
 
             self.channels = []
             self.update_time = None
@@ -206,6 +206,18 @@ class LatestData():
                                      build=False,
                                      update_time=self.update_time)
                              for channel_id in os.listdir(f'{FOLDER_UPDATES}/{self.update_time}/channels')]
+
+
+class SavedChannels(dict):
+    def __init__(self):
+        channel_ids = [channel_id for channel_id in next(
+            os.walk(FOLDER_CHANNELS))[1] if channel_id != 'new_channel']
+
+        with open(f'{FOLDER_CHANNELS}/history_channels.json', 'r') as f:
+            history_channels = json.load(f)
+
+        for channel_id in channel_ids:
+            self[channel_id] = history_channels[channel_id]
 
 
 if __name__ == "__main__":
