@@ -43,6 +43,12 @@
 
 <div class="container">
     <h1>Your channels</h1>
+    {% if not dict_channels %}
+    <br>
+    <em>You are not currently following any channel. Get started by following one ...</em>
+    {% else %}
+
+
     <ul class="listChannels mt-3">
         {% for channel, channel_info in dict_channels.items() %}
         <li class="channel boarded mt-5">
@@ -67,6 +73,8 @@
         {% endfor %}
 
     </ul>
+    {% endif %}
+
 </div>
 
 <div class="container">
