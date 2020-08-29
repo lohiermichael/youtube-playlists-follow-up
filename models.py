@@ -48,8 +48,10 @@ class Channel:
             self.playlists = pd.read_csv(
                 f'{FOLDER_UPDATES}/{self.update_time}/channels/{self.id}/playlists.csv')
 
-            with open(f'{FOLDER_CHANNELS}/{self.id}/channel_info.json', 'r') as f:
-                channel_info = json.load(f)
+            with open(f'{FOLDER_CHANNELS}/history_channels.json', 'r') as f:
+                history_channels = json.load(f)
+
+            channel_info = history_channels[self.id]
 
             self.published_at = channel_info['published_at']
             self.descripion = channel_info['description']
@@ -202,10 +204,12 @@ class LatestData:
                 self.previous_update_time = json.load(
                     f)['previous_update_time']
 
+            self.channels_ids = [channel_id for channel_id in os.listdir(
+                f'{FOLDER_UPDATES}/{self.update_time}/channels')]
+
             self.channels = [Channel(id=channel_id,
                                      build=False,
-                                     update_time=self.update_time)
-                             for channel_id in os.listdir(f'{FOLDER_UPDATES}/{self.update_time}/channels')]
+                                     update_time=self.update_time) for channel_id in self.channels_ids]
 
 
 class SavedChannels(dict):
