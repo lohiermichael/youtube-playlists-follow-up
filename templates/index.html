@@ -39,7 +39,6 @@
 
 
 
-
     .playlist {
         margin-top: 0px;
         margin-bottom: 30px;
@@ -53,6 +52,7 @@
     .listItems {
         list-style: none;
     }
+
 
     #listChannels {
         margin-top: 20px;
@@ -105,7 +105,7 @@
                         <li class="item">
                             <i class="fa fa-youtube"></i> {{ item['title'] }}
                             <p class="detailsDisplay clickable">See details</p>
-                            <ul class="itemDetails" hidden>
+                            <ul class="itemDetails mb-4" hidden>
                                 <li><em class="detail">Publication time:</em> {{ item['publishedAt']}}</li>
                                 <li> <em class="detail">Description:</em> {{ item['description']}}</li>
                             </ul>
