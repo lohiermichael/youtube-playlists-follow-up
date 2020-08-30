@@ -128,65 +128,46 @@
     let listChannels = document.getElementById('listChannels');
     let channelsNames = listChannels.getElementsByClassName('channelName');
     let listPlaylists = listChannels.getElementsByClassName('listPlaylists');
-    if (listChannels !== null) {
-        for (let i = 0; i < channelsNames.length; i++) {
-            // Hide/Display the playlists
-            channelsNames[i].addEventListener('click', function () {
-                if (listPlaylists[i].hidden) {
-                    listPlaylists[i].hidden = false;
+    for (let iChannel = 0; iChannel < channelsNames.length; iChannel++) {
+        // Hide/Display the playlists
+        channelsNames[iChannel].addEventListener('click', function () {
+            if (listPlaylists[iChannel].hidden) {
+                listPlaylists[iChannel].hidden = false;
+                this.style.color = '#ff9999';
+            } else {
+                listPlaylists[iChannel].hidden = true;
+                this.style.color = 'black';
+            }
+        });
+        let playlistsNames = listPlaylists[iChannel].getElementsByClassName('playlistName');
+        let listItems = listPlaylists[iChannel].getElementsByClassName('listItems');
+        for (let iPlaylist = 0; iPlaylist < playlistsNames.length; iPlaylist++) {
+            // Hide/Display the items
+            playlistsNames[iPlaylist].addEventListener('click', function () {
+                if (listItems[iPlaylist].hidden) {
+                    listItems[iPlaylist].hidden = false;
                     this.style.color = '#ff9999';
                 } else {
-                    listPlaylists[i].hidden = true;
+                    listItems[iPlaylist].hidden = true;
                     this.style.color = 'black';
                 }
-            })
-
+            });
+            let displayDetailsButtons = listItems[iPlaylist].getElementsByClassName('detailsDisplay');
+            let listItemsDetails = listItems[iPlaylist].getElementsByClassName('itemDetails')
+            for (let iItem = 0; iItem < displayDetailsButtons.length; iItem++) {
+                // Hide/Display the items details
+                displayDetailsButtons[iItem].addEventListener('click', function () {
+                    if (listItemsDetails[iItem].hidden) {
+                        listItemsDetails[iItem].hidden = false;
+                        this.style.color = '#ff9999';
+                    } else {
+                        listItemsDetails[iItem].hidden = true;
+                        this.style.color = 'black';
+                    }
+                })
+            }
         }
     }
-
-    
-
-    // // Hide/display items on click of playlist
-    // let listPlaylists = document.getElementById('listPlaylists')
-
-    // if (listPlaylists !== null) {
-    //     let playlistsNames = listPlaylists.getElementsByClassName('playlistName');
-    //     let listItems = listPlaylists.getElementsByClassName('listItems');
-
-    //     for (let i = 0; i < playlistsNames.length; i++) {
-    //         playlistsNames[i].addEventListener('click', function () {
-    //             if (listItems[i].hidden) {
-    //                 listItems[i].hidden = false;
-    //                 this.style.color = '#ff9999';
-    //             } else {
-    //                 listItems[i].hidden = true;
-    //                 this.style.color = 'black';
-    //             }
-    //         })
-    //     }
-
-    //     for (let i = 0; i < playlistsNames.length; i++) {
-
-    //         let items = listItems[i].getElementsByClassName('item');
-    //         for (let j = 0; j < items.length; j++) {
-    //             let displayDetailsButton = items[j].getElementsByClassName('detailsDisplay')[0];
-    //             let itemsDetails = items[j].getElementsByClassName('itemDetails')[0];
-    //             displayDetailsButton.addEventListener('click', function () {
-    //                 if (this.textContent == 'See details') {
-    //                     this.textContent = 'Hide details';
-    //                     this.style.color = '#ff9999';
-    //                     itemsDetails.hidden = false;
-    //                 } else {
-    //                     this.textContent = 'See details';
-    //                     this.style.color = 'grey';
-    //                     itemsDetails.hidden = true;
-
-    //                 }
-    //             })
-    //         }
-    //     }
-
-    // }
 
 
     // Click on update
