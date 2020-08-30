@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
+    #removeEmptyUpdates {
+        display: block;
+        width: 40%;
+        margin: 0 auto 0;
+        padding: 14px 28px;
+        cursor: pointer;
+    }
+
+
     #logsTitle {
         margin: 20px 0px;
     }
@@ -23,8 +32,13 @@
     }
 </style>
 
+<div class="container">
+    <h1 id="logsTitle">Logs update times</h1>
+    <form action="/logs/remove_empty_updates" method="POST">
+        <button id="removeEmptyUpdates" class="btn btn-block btn-outline-danger">Remove Updates with no logs</button>
+    </form>
 
-<h1 id="logsTitle">Logs update times</h1>
+</div>
 <ul id="logsByUpdate">
     {% if not logs_by_update %}
     <i>No logs are stored</i>
@@ -50,7 +64,7 @@
     </li>
     {% endfor %}
 </ul>
-
 {% endfor %}
 </ul>
+</div>
 {% endblock %}

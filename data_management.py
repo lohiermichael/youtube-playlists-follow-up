@@ -10,7 +10,7 @@ import pandas as pd
 from authentication import Authentication
 from models import Channel, Playlist
 
-from config import FOLDER_CHANNELS, FOLDER_UPDATES
+from config import FOLDER_CHANNELS, FOLDER_UPDATES, FOLDER_LOGS
 
 
 def initialize_folders():
@@ -36,6 +36,15 @@ def save_new_client_secrets(client_secrets_file):
     """
     with open(f'{FOLDER_CHANNELS}/new_channel/clients_secrets', 'w') as f:
         json.dump(client_secrets_file, f)
+
+
+def remove_files_empty_logs():
+    for log_file in os.listdir(FOLDER_LOGS):
+        with open(f'{FOLDER_LOGS}/{log_file}', 'r') as f:
+            dict_log = json.load(f)
+        # If there is no logs for the update
+        if not dict_log['logs']:
+            os.remove(f'{FOLDER_LOGS}/{log_file}')
 
 
 def add_new_channel(mine: bool,

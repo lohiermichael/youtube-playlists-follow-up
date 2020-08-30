@@ -7,7 +7,7 @@ from flask import Flask, render_template, request, redirect
 from config import *
 from models import LogsByUpdate, LatestData, SavedChannels
 from run import run_flow
-from data_management import add_new_channel, initialize_folders, save_new_client_secrets
+from data_management import add_new_channel, initialize_folders, save_new_client_secrets, remove_files_empty_logs
 
 app = Flask(__name__, static_url_path='/static/')
 
@@ -33,6 +33,12 @@ def index_show_logs():
     logs_by_update = LogsByUpdate()
 
     return render_template('logs.html', **locals())
+
+
+@app.route('/logs/remove_empty_updates', methods=['POST'])
+def remove_empty_updates():
+    remove_files_empty_logs()
+    return redirect('/logs')
 
 
 @app.route('/channels')
