@@ -31,6 +31,13 @@ def initialize_folders():
             json.dump({}, f)
 
 
+def save_new_client_secrets(client_secrets_file):
+    """Used when uploading a new client secrets file in the app
+    """
+    with open(f'{FOLDER_CHANNELS}/new_channel/clients_secrets', 'w') as f:
+        json.dump(client_secrets_file, f)
+
+
 def add_new_channel(mine: bool,
                     username: str = None,
                     new_client_secrets: bool = None,

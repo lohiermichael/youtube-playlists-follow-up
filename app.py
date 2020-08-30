@@ -1,13 +1,13 @@
-import os
-import json
 import shutil
+import json
+
 
 from flask import Flask, render_template, request, redirect
 
-from config import FOLDER_CHANNELS
+from config import *
 from models import LogsByUpdate, LatestData, SavedChannels
 from run import run_flow
-from data_management import add_new_channel, initialize_folders
+from data_management import add_new_channel, initialize_folders, save_new_client_secrets
 
 app = Flask(__name__, static_url_path='/static/')
 
@@ -73,13 +73,32 @@ def old_credentials():
 
 @app.route('/channels/create', methods=['POST'])
 def create_channel():
+    # # Old channel credentials
+    if 'channelChoice' in request.form:
+        add_new_channel(mine=True,
+                        new_client_secrets=False,
+                        channel_id_secrets=request.form['channelChoice']
+                        )
+        return redirect('/channels')
 
-    add_new_channel(mine=True,
-                    new_client_secrets=False,
-                    channel_id_secrets=request.form['channelChoice']
-                    )
+    # New credentials
+    elif 'credentialsFile' in request.files:
+        f = request.files['credentialsFile']
 
-    return redirect('/channels')
+        if not f.filename:
+            # TODO Put a flash because uploaded file
+            return redirect('/channels/new/new_credentials')
+
+        else:
+            #  Save the file
+            file_name = 'client_secrets.json'
+            f.save(f'{FOLDER_CHANNELS}/new_channel/client_secrets.json')
+
+            # Add new channel
+            add_new_channel(mine=True,
+                            new_client_secrets=True,
+                            )
+        return redirect('/channels')
 
 
 if __name__ == __name__:
