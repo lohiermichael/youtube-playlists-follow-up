@@ -1,5 +1,6 @@
 import shutil
 import json
+import os
 
 
 from flask import Flask, render_template, request, redirect
@@ -38,6 +39,12 @@ def index_show_logs():
 @app.route('/logs/remove_empty_updates', methods=['POST'])
 def remove_empty_updates():
     remove_files_empty_logs()
+    return redirect('/logs')
+
+
+@app.route('/logs/remove_log/<log_time>', methods=['POST'])
+def remove_log(log_time):
+    os.remove(f'{FOLDER_LOGS}/{log_time}.json')
     return redirect('/logs')
 
 

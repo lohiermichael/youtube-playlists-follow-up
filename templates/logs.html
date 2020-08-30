@@ -9,14 +9,19 @@
         cursor: pointer;
     }
 
+    .removeLogButton {
+        width: 50px;
+        margin-left: 30px;
+    }
 
-    #logsTitle {
+    #title {
         margin: 20px 0px;
     }
 
     #logsByUpdate {
         list-style: none;
     }
+
 
     i.fa.fa-history {
         margin-right: 5px;
@@ -33,38 +38,45 @@
 </style>
 
 <div class="container">
-    <h1 id="logsTitle">Logs update times</h1>
+    <h1 id="title">Logs update times</h1>
     <form action="/logs/remove_empty_updates" method="POST">
         <button id="removeEmptyUpdates" class="btn btn-block btn-outline-danger">Remove Updates with no logs</button>
     </form>
 
 </div>
-<ul id="logsByUpdate">
-    {% if not logs_by_update %}
-    <i>No logs are stored</i>
-    {% endif %}
 
-
-    {% for log_by_update in logs_by_update %}
-    <li class="logByUpdate">
-        <i class="fa fa-history fa-lg"></i>
-        <em class="logTime">{{log_by_update['log_time']}}</em>
-
-
-        <p>Previous update: <i class="previousTime">{{log_by_update['previous_update_time']}}</i></p>
-
-        {% if not log_by_update['logs'] %}
-        <i>No logs for this update</i>
+<div class="container">
+    <ul id="logsByUpdate">
+        {% if not logs_by_update %}
+        <i>No logs are stored</i>
         {% endif %}
 
 
-        <ul class="logs">
-            {% for log in log_by_update['logs'] %}
-            <li>{{log['message']}}</li>
-    </li>
-    {% endfor %}
-</ul>
-{% endfor %}
-</ul>
+        {% for log_by_update in logs_by_update %}
+        <li class="logByUpdate">
+            <form action="/logs/remove_log/{{log_by_update['log_time']}}" class="form-inline" method="POST">
+                <i class="fa fa-history fa-lg"></i>
+                <em class="logTime">{{log_by_update['log_time']}}</em>
+                <button class="removeLogButton btn btn-block btn-outline-danger">
+                    <i class="fa fa-trash"></i>
+                </button>
+
+            </form>
+
+            <p>Previous update: <i class="previousTime">{{log_by_update['previous_update_time']}}</i></p>
+
+            {% if not log_by_update['logs'] %}
+            <i>No logs for this update</i>
+            {% endif %}
+
+
+            <ul class="logs">
+                {% for log in log_by_update['logs'] %}
+                <li>{{log['message']}}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
