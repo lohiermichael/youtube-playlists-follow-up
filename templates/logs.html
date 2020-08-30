@@ -57,9 +57,12 @@
             <form action="/logs/remove_log/{{log_by_update['log_time']}}" class="form-inline" method="POST">
                 <i class="fa fa-history fa-lg"></i>
                 <em class="logTime">{{log_by_update['log_time']}}</em>
-                <button class="removeLogButton btn btn-block btn-outline-danger">
-                    <i class="fa fa-trash"></i>
-                </button>
+                {% if log_by_update['log_time'] != latest_update %}
+                        <button class="removeLogButton btn btn-block btn-outline-danger">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                {% endif %}
+                
 
             </form>
 

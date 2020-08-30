@@ -42,11 +42,15 @@ def save_new_client_secrets(client_secrets_file):
 
 
 def remove_files_empty_logs():
+    if os.path.isfile(f'{FOLDER_UPDATES}/versions.txt'):
+        with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f:
+            latest_update = f.read().replace('\n', '')
+
     for log_file in os.listdir(FOLDER_LOGS):
         with open(f'{FOLDER_LOGS}/{log_file}', 'r') as f:
             dict_log = json.load(f)
         # If there is no logs for the update
-        if not dict_log['logs']:
+        if not dict_log['logs'] and dict_log['log_time'] != latest_update:
             os.remove(f'{FOLDER_LOGS}/{log_file}')
 
 

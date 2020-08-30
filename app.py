@@ -34,6 +34,10 @@ def index():
 @app.route('/logs')
 def index_show_logs():
 
+    if os.path.isfile(f'{FOLDER_UPDATES}/versions.txt'):
+        with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f:
+            latest_update = f.read().replace('\n', '')
+
     # Get the logs from the files
     logs_by_update = LogsByUpdate()
 
