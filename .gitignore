@@ -137,7 +137,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Vurtual Studiao Code
+# Virtual Studiao Code
 .vscode
 
 *.json

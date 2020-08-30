@@ -1,4 +1,4 @@
-pandas
-google-api-python-client
-google-auth-oauthlib
-flask
+pandas==1.1.0
+google-api-python-client==1.10.0
+google-auth-oauthlib==0.4.1
+flask==1.1.2

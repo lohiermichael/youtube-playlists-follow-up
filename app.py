@@ -12,7 +12,7 @@ from data_management import add_new_channel, initialize_folders, save_new_client
 
 app = Flask(__name__, static_url_path='/static/')
 
-app.secret_key = os.environ['FLASK_SECRET_KEY']
+app.secret_key = os.urandom(24)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -139,4 +139,4 @@ def create_channel():
 if __name__ == __name__:
 
     initialize_folders()
-    app.run()
+    app.run(debug=True, host='5000')

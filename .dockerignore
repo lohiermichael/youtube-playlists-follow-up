@@ -1,0 +1,12 @@
+.git
+.gitignore
+
+.vscode
+
+*.env
+*.json
+*.csv
+
+/channels/
+/updates/
+/logs/
