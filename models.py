@@ -1,6 +1,8 @@
 import os
 import json
 import shutil
+from pathlib import Path
+
 from datetime import datetime
 
 from googleapiclient.discovery import build
@@ -185,11 +187,7 @@ class LatestData:
         # Remove any possible old folder of data
         if 'versions.txt' not in os.listdir(FOLDER_UPDATES):
             shutil.rmtree(FOLDER_UPDATES)
-            # raise Exception('versions.txt was not present in the files')
-        elif not os.listdir(FOLDER_LOGS):
-            shutil.rmtree(FOLDER_LOGS)
-            # raise Exception(
-            #     "We can't get the latest data as the log file is empty")
+            Path(FOLDER_UPDATES).mkdir(parents=True, exist_ok=True)
 
             self.channels = []
             self.update_time = None

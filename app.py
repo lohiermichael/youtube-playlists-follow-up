@@ -3,7 +3,7 @@ import json
 import os
 
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 
 from config import *
 from models import LogsByUpdate, LatestData, SavedChannels
@@ -12,13 +12,17 @@ from data_management import add_new_channel, initialize_folders, save_new_client
 
 app = Flask(__name__, static_url_path='/static/')
 
+app.secret_key = os.environ['FLASK_SECRET_KEY']
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     if request.method == 'POST':
+
         run_flow()
 
+        flash('You have just run the new update successfully!', 'success')
         return redirect('/logs')
 
     elif request.method == 'GET':
@@ -39,12 +43,17 @@ def index_show_logs():
 @app.route('/logs/remove_empty_updates', methods=['POST'])
 def remove_empty_updates():
     remove_files_empty_logs()
+
+    flash('You have successfully removed all the update times with empty logs!', 'deletion')
     return redirect('/logs')
 
 
 @app.route('/logs/remove_log/<log_time>', methods=['POST'])
 def remove_log(log_time):
     os.remove(f'{FOLDER_LOGS}/{log_time}.json')
+
+    flash(
+        f'You have successfully removed the update time: {log_time}', 'deletion')
     return redirect('/logs')
 
 
@@ -61,18 +70,21 @@ def unfollow_channel(channel_id):
 
     # Remove the channel
     shutil.rmtree(f'{FOLDER_CHANNELS}/{channel_id}')
-    print(f'Channel {channel_id} removed!')
 
+    flash(
+        f'You have successfully unfollowed the channel: {channel_id}', 'deletion')
     return redirect('/channels')
 
 
 @app.route('/channels/new/strategy_choice')
 def choose_strategy():
+
     return render_template('channels/new/strategy_choice.html')
 
 
 @app.route('/channels/new/new_credentials')
 def new_credentials():
+
     return render_template('channels/new/new_credentials.html')
 
 
@@ -92,6 +104,8 @@ def create_channel():
                         new_client_secrets=False,
                         channel_id_secrets=request.form['channelChoice']
                         )
+
+        flash('You have just created a new channel', 'success')
         return redirect('/channels')
 
     # New credentials
@@ -100,6 +114,8 @@ def create_channel():
 
         if not f.filename:
             # TODO Put a flash because uploaded file
+
+            flash('You need to upload a file', 'error')
             return redirect('/channels/new/new_credentials')
 
         else:
@@ -111,7 +127,9 @@ def create_channel():
             add_new_channel(mine=True,
                             new_client_secrets=True,
                             )
-        return redirect('/channels')
+
+            flash('You have just created a new channel', 'success')
+            return redirect('/channels')
 
 
 if __name__ == __name__:

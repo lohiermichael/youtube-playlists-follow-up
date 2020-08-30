@@ -22,6 +22,9 @@ def initialize_folders():
     # Create the channels folder
     Path(FOLDER_CHANNELS).mkdir(parents=True, exist_ok=True)
 
+    # Create the logs folder
+    Path(FOLDER_LOGS).mkdir(parents=True, exist_ok=True)
+
     # In the channels folder make a folder of new channel
     Path(f'{FOLDER_CHANNELS}/new_channel').mkdir(parents=True, exist_ok=True)
 
