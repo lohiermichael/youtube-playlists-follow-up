@@ -125,46 +125,39 @@
 
 <!-- <script src="{{url_for('static', filename='js/index.js')}}"></script> -->
 <script>
-    let listChannels = document.getElementById('listChannels');
-    let channelsNames = listChannels.getElementsByClassName('channelName');
-    let listPlaylists = listChannels.getElementsByClassName('listPlaylists');
-    for (let iChannel = 0; iChannel < channelsNames.length; iChannel++) {
-        // Hide/Display the playlists
-        channelsNames[iChannel].addEventListener('click', function () {
-            if (listPlaylists[iChannel].hidden) {
-                listPlaylists[iChannel].hidden = false;
+
+    function clickDisplay(clickOn, elementToDisplay) {
+        clickOn.addEventListener('click', function () {
+            if (elementToDisplay.hidden) {
+                elementToDisplay.hidden = false;
                 this.style.color = '#ff9999';
             } else {
-                listPlaylists[iChannel].hidden = true;
+                elementToDisplay.hidden = true;
                 this.style.color = 'black';
             }
         });
+
+    }
+
+    let listChannels = document.getElementById('listChannels');
+
+    // Hide/Display the playlists
+    let channelsNames = listChannels.getElementsByClassName('channelName');
+    let listPlaylists = listChannels.getElementsByClassName('listPlaylists');
+    for (let iChannel = 0; iChannel < channelsNames.length; iChannel++) {
+        clickDisplay(channelsNames[iChannel], listPlaylists[iChannel])
+
+        // Hide/Display the items
         let playlistsNames = listPlaylists[iChannel].getElementsByClassName('playlistName');
         let listItems = listPlaylists[iChannel].getElementsByClassName('listItems');
         for (let iPlaylist = 0; iPlaylist < playlistsNames.length; iPlaylist++) {
-            // Hide/Display the items
-            playlistsNames[iPlaylist].addEventListener('click', function () {
-                if (listItems[iPlaylist].hidden) {
-                    listItems[iPlaylist].hidden = false;
-                    this.style.color = '#ff9999';
-                } else {
-                    listItems[iPlaylist].hidden = true;
-                    this.style.color = 'black';
-                }
-            });
+            clickDisplay(playlistsNames[iPlaylist], listItems[iPlaylist])
+
+            // Hide/Display the items details
             let displayDetailsButtons = listItems[iPlaylist].getElementsByClassName('detailsDisplay');
             let listItemsDetails = listItems[iPlaylist].getElementsByClassName('itemDetails')
             for (let iItem = 0; iItem < displayDetailsButtons.length; iItem++) {
-                // Hide/Display the items details
-                displayDetailsButtons[iItem].addEventListener('click', function () {
-                    if (listItemsDetails[iItem].hidden) {
-                        listItemsDetails[iItem].hidden = false;
-                        this.style.color = '#ff9999';
-                    } else {
-                        listItemsDetails[iItem].hidden = true;
-                        this.style.color = 'black';
-                    }
-                })
+                clickDisplay(displayDetailsButtons[iItem], listItemsDetails[iItem])
             }
         }
     }
