@@ -1,3 +1,3 @@
-FOLDER_UPDATES = './updates'
-FOLDER_CHANNELS = './channels'
-FOLDER_LOGS = './logs'
+FOLDER_UPDATES = './src/updates'
+FOLDER_CHANNELS = './src/channels'
+FOLDER_LOGS = './src/logs'

@@ -111,14 +111,14 @@ def save_data(time: datetime = datetime.now(), first_time=True):
         authentication = Authentication(
             first_time=False, channel_id=channel_id)
         Path(
-            f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}').mkdir(parents=True, exist_ok=True)
+            f'{FOLDER_UPDATES}/{time}/channels/{channel_id}').mkdir(parents=True, exist_ok=True)
         channel = Channel(authentication=authentication,
                           id=channel_id, build=True)
         playlists = channel.playlists
         Path(
-            f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
+            f'{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists').mkdir(parents=True, exist_ok=True)
         playlists.to_csv(
-            f'./{FOLDER_UPDATES}/{time}/{FOLDER_CHANNELS}/{channel_id}/playlists.csv')
+            f'{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists.csv')
         for _, playlist in playlists.iterrows():
             playlist = Playlist(authentication=authentication,
                                 id=playlist.id,
@@ -126,13 +126,10 @@ def save_data(time: datetime = datetime.now(), first_time=True):
                                 build=True)
             playlist_items = playlist.items
             playlist_items.to_csv(
-                f'./{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists/{playlist.title}.csv', index=False)
+                f'{FOLDER_UPDATES}/{time}/channels/{channel_id}/playlists/{playlist.title}.csv', index=False)
 
 
 def save_logs(logs: list):
-
-    # Create the log file if not already here
-    Path(f'logs').mkdir(parents=True, exist_ok=True)
 
     # Get the versions
     with open(f'{FOLDER_UPDATES}/versions.txt', 'r') as f_in:
@@ -145,7 +142,7 @@ def save_logs(logs: list):
     log_file_content = {'log_time': log_time,
                         'previous_update_time': previous_update_time, 'logs': logs}
 
-    with open(f'logs/{log_time}.json', 'w') as f:
+    with open(f'{FOLDER_LOGS}/{log_time}.json', 'w') as f:
         json.dump(log_file_content, f)
 
 
@@ -159,7 +156,7 @@ def remove_old_version():
     with open(f'{FOLDER_UPDATES}/versions.txt', 'w') as f_out:
         versions = f_out.write(versions[1])
 
-    shutil.rmtree(f'./{FOLDER_UPDATES}/{old_version}/')
+    shutil.rmtree(f'{FOLDER_UPDATES}/{old_version}/')
 
 
 def remove_all_data():

@@ -119,7 +119,7 @@ class CompareVersions:
                 self.summary['common_channels'][common_channel][type_playlists][playlist] = {
                 }
                 df_playlist = pd.read_csv(
-                    f'./{version}/{common_channel}/{playlist}.csv')
+                    f'{FOLDER_UPDATES}/{version}/channels/{common_channel}/playlists/{playlist}.csv')
                 self.summary['common_channels'][common_channel][type_playlists][playlist]['items'] = df_playlist.T.to_dict(
                 )
 
@@ -157,9 +157,9 @@ class CompareVersions:
                 self.summary['common_channels'][channel]['common_playlists'][playlist] = {
                 }
                 df_old_playlist = pd.read_csv(
-                    f'./{FOLDER_UPDATES}/{self.old_version}/channels/{channel}/playlists/{playlist}.csv')
+                    f'{FOLDER_UPDATES}/{self.old_version}/channels/{channel}/playlists/{playlist}.csv')
                 df_new_playlist = pd.read_csv(
-                    f'./{FOLDER_UPDATES}/{self.new_version}/channels/{channel}/playlists/{playlist}.csv')
+                    f'{FOLDER_UPDATES}/{self.new_version}/channels/{channel}/playlists/{playlist}.csv')
                 common_items, old_items, new_items = make_summary(
                     old_L=list(df_old_playlist.title), new_L=list(df_new_playlist.title), print_of=False)
 
