@@ -137,6 +137,5 @@ def create_channel():
 
 
 if __name__ == __name__:
-
     initialize_folders()
-    app.run(debug=True, host='5000')
+    app.run(debug=False, host='0.0.0.0')
