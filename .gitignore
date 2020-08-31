@@ -143,6 +143,6 @@ cython_debug/
 *.json
 *.csv
 
-/channels/
-/updates/
-/logs/
+/src/channels/
+src/updates/
+src/logs/
