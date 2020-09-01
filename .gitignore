@@ -143,6 +143,6 @@ cython_debug/
 *.json
 *.csv
 
-/src/channels/
-/src/updates/
-/src/logs/
+/youtube_playlists_follow_up/src/channels/
+/youtube_playlists_follow_up/src/updates/
+/youtube_playlists_follow_up/src/logs/
