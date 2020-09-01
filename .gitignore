@@ -139,9 +139,11 @@ cython_debug/
 
 # Virtual Studiao Code
 .vscode
-
+*.env
 *.json
 *.csv
+
+export_env.sh
 
 /youtube_playlists_follow_up/src/channels/
 /youtube_playlists_follow_up/src/updates/

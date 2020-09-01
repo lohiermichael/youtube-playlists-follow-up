@@ -21,6 +21,8 @@ ENV FLASK_APP=app.py
 
 FROM base as debug
 
+ENV FLASK_ENV development
+
 RUN pip install ptvsd
 
 WORKDIR /work/

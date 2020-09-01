@@ -56,8 +56,9 @@ class Authentication:
         # Ask for authorization
         flow = InstalledAppFlow.from_client_secrets_file(self.client_secrets_file,
                                                          self.scopes)
+
         # Get the credentials
-        self.credentials = flow.run_local_server()
+        self.credentials = flow.run_local_server(port=8080, open_browser=True)
 
         # Make the Youtube object
         self._make_youtube_object()
