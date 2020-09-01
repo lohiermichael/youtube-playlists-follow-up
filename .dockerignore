@@ -7,6 +7,6 @@
 *.json
 *.csv
 
-src/channels/
-src/updates/
-src/logs/
+/src/channels/
+/src/updates/
+/src/logs/
