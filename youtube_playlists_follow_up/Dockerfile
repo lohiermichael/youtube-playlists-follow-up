@@ -7,12 +7,12 @@ RUN mkdir /work/
 WORKDIR /work/
 
 # We copy and run the requirements.txt file
-COPY /src/requirements.txt /work/requirements.txt
+COPY ./src/requirements.txt /work/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # We copy the content of the src folder
-COPY /src/ /work/
+COPY ./src/ /work/
 
 # We define the Flask app environment variable
 ENV FLASK_APP=app.py
@@ -28,6 +28,9 @@ CMD python -m ptvsd --host 0.0.0.0 --port 5678 --wait --multiprocess -m flask ru
 
 ################# START NEW IMAGE: PRODUCTION #################
 FROM base as prod
+
+RUN mkdir /work/
+WORKDIR /work/
 
 CMD flask run -h 0.0.0 -p 5000
 
