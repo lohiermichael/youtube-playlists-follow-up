@@ -1,15 +1,17 @@
-python: # docker run -it -v ${PWD}:/work -w /work -p 5003:5000 lohiermichael/youtube-playlists-follow-up:0.0.1 /bin/sh
-    container_name: youtube_playlists_follow_up
-    image: lohiermichael/youtube_playlists_follow_up:0.0.1
-    build:
-        context: ./youtube_playlists_follow_up
-        target: debug
-    # working_dir: /work      # comment out for build.target:prod
-    # entrypoint: /bin/sh     # comment out for build.target:prod
-    # stdin_open: true        # comment out for build.target:prod
-    # tty: true               # comment out for build.target:prod
-    volumes:
-    - ./youtube_playlists_follow_up/src/:/work
-    ports: 
-        - 5000:5000
-        - 5678:5678
+version: "3.4"
+services:
+    python: # docker run -it -v ${PWD}:/work -w /work -p 5003:5000 lohiermichael/youtube-playlists-follow-up:0.0.1 /bin/sh
+        container_name: youtube_playlists_follow_up
+        image: lohiermichael/youtube_playlists_follow_up:0.0.1
+        build:
+            context: ./youtube_playlists_follow_up
+            target: debug
+        # working_dir: /work      # comment out for build.target:prod
+        # entrypoint: /bin/sh     # comment out for build.target:prod
+        # stdin_open: true        # comment out for build.target:prod
+        # tty: true               # comment out for build.target:prod
+        volumes:
+        - ./youtube_playlists_follow_up/src/:/work
+        ports: 
+            - 5000:5000
+            - 5678:5678
