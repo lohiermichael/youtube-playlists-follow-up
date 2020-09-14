@@ -54,14 +54,24 @@ def remove_files_empty_logs():
             os.remove(f'{FOLDER_LOGS}/{log_file}')
 
 
+def get_authorization_url():
+    authentication = Authentication(first_time=True,
+                                    new_client_secrets=True)
+
+    authorization_url = authentication.get_authorization_url()
+
+    return authorization_url
+
+
 def add_new_channel(mine: bool,
                     username: str = None,
                     new_client_secrets: bool = None,
                     channel_id_secrets: str = None):
 
     if new_client_secrets:
-        authentication = Authentication(first_time=True,
-                                        new_client_secrets=True)
+
+        pass
+
     else:
         authentication = Authentication(first_time=True,
                                         new_client_secrets=False,

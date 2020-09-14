@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, redirect, flash
 from config import *
 from models import LogsByUpdate, LatestData, SavedChannels
 from run import run_flow
-from data_management import add_new_channel, initialize_folders, save_new_client_secrets, remove_files_empty_logs
+from data_management import add_new_channel, initialize_folders, save_new_client_secrets, remove_files_empty_logs, get_authorization_url
 
 app = Flask(__name__, static_url_path='/static/')
 
@@ -117,7 +117,6 @@ def create_channel():
         f = request.files['credentialsFile']
 
         if not f.filename:
-            # TODO Put a flash because uploaded file
 
             flash('You need to upload a file', 'error')
             return redirect('/channels/new/new_credentials')
@@ -127,13 +126,19 @@ def create_channel():
             file_name = 'client_secrets.json'
             f.save(f'{FOLDER_CHANNELS}/new_channel/client_secrets.json')
 
-            # Add new channel
-            add_new_channel(mine=True,
-                            new_client_secrets=True,
-                            )
+            # # Add new channel
+            # add_new_channel(mine=True,
+            #                 new_client_secrets=True,
+            #                 )
 
             flash('You have just created a new channel', 'success')
-            return redirect('/channels')
+            return redirect('/channels/create/security_checkpoint')
+
+
+@app.route('/channels/create/security_checkpoint')
+def security_checkpoint():
+    authorization_url = get_authorization_url()
+    return render_template('channels/new/security_checkpoint.html', **locals())
 
 
 if __name__ == __name__:

@@ -37,8 +37,8 @@ class Authentication:
         self.client_secrets_file = self._define_client_secrets_file()
 
         if self.first_time:
-            self._get_authenticated_first_time()
-            self._move_client_secrets_file()
+            self.get_authorization_url()
+            # self._move_client_secrets_file()
         else:
             self._get_authenticated_from_file()
 
@@ -51,14 +51,19 @@ class Authentication:
         elif self.case_already_stored:
             return f'{FOLDER_CHANNELS}/{self.channel_id}/client_secrets.json'
 
-    def _get_authenticated_first_time(self):
+    def get_authorization_url(self):
 
         # Ask for authorization
         flow = InstalledAppFlow.from_client_secrets_file(self.client_secrets_file,
                                                          self.scopes)
 
-        # Get the credentials
-        self.credentials = flow.run_local_server(port=8080, open_browser=True)
+        flow.run_console()
+
+        return self.authorization_url
+
+    def _get_authenticated_first_time(self):
+
+        self.credentials = flow.fetch_token
 
         # Make the Youtube object
         self._make_youtube_object()
