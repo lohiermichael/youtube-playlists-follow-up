@@ -31,7 +31,7 @@ CMD python -m ptvsd --host 0.0.0.0 --port 5678 --wait --multiprocess -m flask ru
 ################# START NEW IMAGE: PRODUCTION #################
 FROM base as prod
 
-RUN mkdir /work/
+RUN mkdir -p /work/
 WORKDIR /work/
 
 CMD flask run -h 0.0.0 -p 5000

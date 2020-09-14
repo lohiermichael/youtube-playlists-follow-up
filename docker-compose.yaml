@@ -5,7 +5,7 @@ services:
         image: lohiermichael/youtube_playlists_follow_up:0.0.1
         build:
             context: ./youtube_playlists_follow_up
-            target: debug
+            target: prod
         # working_dir: /work      # comment out for build.target:prod
         # entrypoint: /bin/sh     # comment out for build.target:prod
         # stdin_open: true        # comment out for build.target:prod
