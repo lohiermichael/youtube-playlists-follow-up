@@ -23,6 +23,7 @@ FROM base as debug
 
 ENV FLASK_ENV development
 
+RUN pip install --upgrade pip
 RUN pip install ptvsd
 
 WORKDIR /work/
