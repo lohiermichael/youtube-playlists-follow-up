@@ -145,6 +145,5 @@ cython_debug/
 
 export_env.sh
 
-/youtube_playlists_follow_up/src/channels/
-/youtube_playlists_follow_up/src/updates/
-/youtube_playlists_follow_up/src/logs/
+# Where the data is stored
+data/

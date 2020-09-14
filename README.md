@@ -10,3 +10,20 @@ If you had a video in your playlist that you removed and you want to restore you
 ## Additional links
 
 [Link to YouTube Data API tutorial](https://developers.google.com/youtube/v3/quickstart/python)
+
+## Installation
+
+1. Install the requirements
+
+```pip install -r src/requirements.txt```
+
+2. Export the environment variable FLASK_APP
+
+```export $FLASK_APP=./src/app.py```
+
+3. Run the application
+
+```flask run```
+
+4. Open your Web Browser at ```localhost:5000``` and go with the flow :) !
+
